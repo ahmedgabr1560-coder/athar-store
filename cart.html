@@ -10,359 +10,110 @@
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
   <style>
-    .cart-page {
-      padding: 120px 0 80px;
-      min-height: 70vh;
-    }
-    .cart-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 40px;
-      flex-wrap: wrap;
-      gap: 16px;
-    }
-    .cart-header h1 {
-      font-size: 1.8rem;
-      font-weight: 700;
-    }
-    .cart-count-text {
-      color: var(--text-muted);
-      font-size: 14px;
-    }
-    .cart-layout {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 32px;
-    }
-    @media (min-width: 900px) {
-      .cart-layout {
-        grid-template-columns: 1fr 360px;
-      }
-    }
-    .cart-items {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-    .cart-item {
-      display: flex;
-      gap: 16px;
-      background: #fff;
-      border-radius: var(--radius);
-      padding: 16px;
-      box-shadow: var(--shadow);
-      align-items: center;
-    }
-    [data-theme="dark"] .cart-item {
-      background: var(--charcoal);
-    }
-    .cart-item-img {
-      width: 90px;
-      height: 110px;
-      border-radius: 8px;
-      overflow: hidden;
-      flex-shrink: 0;
-      background: #eee;
-    }
-    .cart-item-img img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    .cart-item-info {
-      flex: 1;
-      min-width: 0;
-    }
-    .cart-item-name {
-      font-size: 15px;
-      font-weight: 600;
-      margin-bottom: 6px;
-    }
-    .cart-item-price {
-      font-size: 15px;
-      font-weight: 700;
-      color: var(--gold-dark);
-    }
-    [data-theme="dark"] .cart-item-price {
-      color: var(--gold);
-    }
-    .cart-item-actions {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-top: 10px;
-    }
-    .qty-control {
-      display: flex;
-      align-items: center;
-      gap: 0;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      overflow: hidden;
-    }
-    .qty-btn {
-      width: 32px;
-      height: 32px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: var(--cream);
-      color: var(--text);
-      font-size: 16px;
-      font-weight: 600;
-      transition: var(--transition);
-    }
-    [data-theme="dark"] .qty-btn {
-      background: rgba(255,255,255,0.08);
-    }
-    .qty-btn:hover {
-      background: var(--gold);
-      color: #111;
-    }
-    .qty-value {
-      width: 36px;
-      text-align: center;
-      font-weight: 600;
-      font-size: 14px;
-    }
-    .remove-btn {
-      color: #c44;
-      font-size: 13px;
-      font-weight: 500;
-      padding: 4px 8px;
-      border-radius: 6px;
-      transition: var(--transition);
-    }
-    .remove-btn:hover {
-      background: rgba(204,68,68,0.1);
-    }
-    .cart-summary {
-      background: #fff;
-      border-radius: var(--radius);
-      padding: 24px;
-      box-shadow: var(--shadow);
-      height: fit-content;
-      position: sticky;
-      top: 100px;
-    }
-    [data-theme="dark"] .cart-summary {
-      background: var(--charcoal);
-    }
-    .cart-summary h3 {
-      font-size: 1.2rem;
-      margin-bottom: 20px;
-      font-weight: 700;
-    }
-    .summary-row {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 12px;
-      font-size: 14px;
-    }
-    .summary-row.total {
-      font-size: 18px;
-      font-weight: 700;
-      padding-top: 16px;
-      border-top: 1px solid var(--border);
-      margin-top: 8px;
-    }
-    .summary-row .gold {
-      color: var(--gold-dark);
-    }
-    [data-theme="dark"] .summary-row .gold {
-      color: var(--gold);
-    }
-    .checkout-btn {
-      width: 100%;
-      margin-top: 24px;
-      justify-content: center;
-      padding: 16px;
-      font-size: 16px;
-    }
-    .empty-cart {
-      text-align: center;
-      padding: 60px 20px;
-    }
-    .empty-cart svg {
-      width: 80px;
-      height: 80px;
-      color: var(--text-muted);
-      margin-bottom: 20px;
-      opacity: 0.5;
-    }
-    .empty-cart h2 {
-      font-size: 1.4rem;
-      margin-bottom: 12px;
-    }
-    .empty-cart p {
-      color: var(--text-muted);
-      margin-bottom: 28px;
-    }
-    .continue-shopping {
-      display: inline-flex;
-    }
+    .cart-page { padding: 120px 0 80px; min-height: 70vh; }
+    .cart-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 40px; flex-wrap: wrap; gap: 16px; }
+    .cart-header h1 { font-size: 1.8rem; font-weight: 700; }
+    .cart-count-text { color: var(--text-muted); font-size: 14px; }
+    .cart-layout { display: grid; grid-template-columns: 1fr; gap: 32px; }
+    @media (min-width: 900px) { .cart-layout { grid-template-columns: 1fr 360px; } }
+    .cart-items { display: flex; flex-direction: column; gap: 16px; }
+    .cart-item { display: flex; gap: 16px; background: #fff; border-radius: var(--radius); padding: 16px; box-shadow: var(--shadow); align-items: center; }
+    [data-theme="dark"] .cart-item { background: var(--charcoal); }
+    .cart-item-img { width: 90px; height: 110px; border-radius: 8px; overflow: hidden; flex-shrink: 0; background: #eee; }
+    .cart-item-img img { width: 100%; height: 100%; object-fit: cover; }
+    .cart-item-info { flex: 1; min-width: 0; }
+    .cart-item-name { font-size: 15px; font-weight: 600; margin-bottom: 6px; }
+    .cart-item-price { font-size: 15px; font-weight: 700; color: var(--gold-dark); }
+    [data-theme="dark"] .cart-item-price { color: var(--gold); }
+    .cart-item-actions { display: flex; align-items: center; gap: 12px; margin-top: 10px; }
+    .qty-control { display: flex; align-items: center; gap: 0; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+    .qty-btn { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; background: var(--cream); color: var(--text); font-size: 16px; font-weight: 600; transition: var(--transition); }
+    [data-theme="dark"] .qty-btn { background: rgba(255,255,255,0.08); }
+    .qty-btn:hover { background: var(--gold); color: #111; }
+    .qty-value { width: 36px; text-align: center; font-weight: 600; font-size: 14px; }
+    .remove-btn { color: #c44; font-size: 13px; font-weight: 500; padding: 4px 8px; border-radius: 6px; transition: var(--transition); }
+    .remove-btn:hover { background: rgba(204,68,68,0.1); }
+    .cart-summary { background: #fff; border-radius: var(--radius); padding: 24px; box-shadow: var(--shadow); height: fit-content; position: sticky; top: 100px; }
+    [data-theme="dark"] .cart-summary { background: var(--charcoal); }
+    .cart-summary h3 { font-size: 1.2rem; margin-bottom: 20px; font-weight: 700; }
+    .summary-row { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 14px; }
+    .summary-row.total { font-size: 18px; font-weight: 700; padding-top: 16px; border-top: 1px solid var(--border); margin-top: 8px; }
+    .summary-row .gold { color: var(--gold-dark); }
+    [data-theme="dark"] .summary-row .gold { color: var(--gold); }
+    .checkout-btn { width: 100%; margin-top: 24px; justify-content: center; padding: 16px; font-size: 16px; }
+    .empty-cart { text-align: center; padding: 60px 20px; }
+    .empty-cart svg { width: 80px; height: 80px; color: var(--text-muted); margin-bottom: 20px; opacity: 0.5; }
+    .empty-cart h2 { font-size: 1.4rem; margin-bottom: 12px; }
+    .empty-cart p { color: var(--text-muted); margin-bottom: 28px; }
+    .continue-shopping { display: inline-flex; }
   </style>
 </head>
 <body>
-  <!-- Header -->
   <header class="header" id="header">
     <div class="header-inner">
       <div class="header-left">
         <a href="cart.html" class="icon-btn cart-btn" aria-label="السلة">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-            <path d="M6 6h15l-1.5 9h-12z"></path>
-            <circle cx="9" cy="20" r="1"></circle>
-            <circle cx="18" cy="20" r="1"></circle>
-            <path d="M6 6L5 2H2"></path>
-          </svg>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 6h15l-1.5 9h-12z"></path><circle cx="9" cy="20" r="1"></circle><circle cx="18" cy="20" r="1"></circle><path d="M6 6L5 2H2"></path></svg>
           <span class="cart-count">0</span>
         </a>
-        <button class="icon-btn" aria-label="الحساب">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-            <circle cx="12" cy="8" r="4"></circle>
-            <path d="M4 20c0-4 4-6 8-6s8 2 8 6"></path>
-          </svg>
-        </button>
-        <div class="search-box">
-          <input type="text" placeholder="ابحث عن منتج..." />
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="11" cy="11" r="8"></circle>
-            <path d="M21 21l-4.35-4.35"></path>
-          </svg>
-        </div>
+        <button class="icon-btn" aria-label="الحساب"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"></circle><path d="M4 20c0-4 4-6 8-6s8 2 8 6"></path></svg></button>
+        <div class="search-box"><input type="text" placeholder="ابحث عن منتج..." /><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg></div>
       </div>
-
-      <a href="index.html" class="logo">
-        <span class="logo-mark">A</span>
-        <span class="logo-text">ATHAR</span>
-        <span class="logo-sub">MEN'S FASHION</span>
-      </a>
-
+      <a href="index.html" class="logo"><span class="logo-mark">A</span><span class="logo-text">ATHAR</span><span class="logo-sub">MEN'S FASHION</span></a>
       <nav class="nav">
         <a href="index.html#home" class="nav-link">الرئيسية</a>
         <a href="index.html#products" class="nav-link">المنتجات</a>
         <a href="index.html#categories" class="nav-link">الأقسام</a>
         <a href="index.html#about" class="nav-link">من نحن</a>
-        <a href="index.html#contact" class="nav-link">تواصل معنا</a>
+        <a href="track.html" class="nav-link">متابعة الطلب</a>
       </nav>
-
       <div class="header-right">
         <button class="theme-toggle" id="themeToggle" aria-label="تبديل الوضع">
-          <svg class="sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="12" cy="12" r="5"></circle>
-            <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"></path>
-          </svg>
-          <svg class="moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-          </svg>
+          <svg class="sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"></path></svg>
+          <svg class="moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
         </button>
-        <button class="menu-toggle" id="menuToggle" aria-label="القائمة">
-          <span></span><span></span><span></span>
-        </button>
+        <button class="menu-toggle" id="menuToggle" aria-label="القائمة"><span></span><span></span><span></span></button>
       </div>
     </div>
   </header>
-
-  <!-- Mobile Menu -->
   <div class="mobile-menu" id="mobileMenu">
-    <a href="index.html#home">الرئيسية</a>
-    <a href="index.html#products">المنتجات</a>
-    <a href="index.html#categories">الأقسام</a>
-    <a href="index.html#about">من نحن</a>
-    <a href="index.html#contact">تواصل معنا</a>
+    <a href="index.html#home">الرئيسية</a><a href="index.html#products">المنتجات</a><a href="index.html#categories">الأقسام</a><a href="index.html#about">من نحن</a><a href="track.html">متابعة الطلب</a>
   </div>
-
-  <!-- Cart Page -->
   <section class="cart-page">
     <div class="container">
       <div class="cart-header">
-        <div>
-          <h1>سلة التسوق</h1>
-          <p class="cart-count-text" id="cartItemsCount">0 منتجات</p>
-        </div>
+        <div><h1>سلة التسوق</h1><p class="cart-count-text" id="cartItemsCount">0 منتجات</p></div>
         <a href="index.html#products" class="btn btn-outline continue-shopping">متابعة التسوق ←</a>
       </div>
-
-      <div id="cartContent">
-        <!-- Filled by JS -->
-      </div>
+      <div id="cartContent"></div>
     </div>
   </section>
-
-  <!-- Footer -->
   <footer class="footer">
     <div class="container">
       <div class="footer-grid">
-        <div class="footer-brand">
-          <a href="index.html" class="logo">
-            <span class="logo-mark">A</span>
-            <span class="logo-text">ATHAR</span>
-          </a>
-          <p>أكثر من مجرد ملابس.. أسلوب حياة</p>
-        </div>
-        <div class="footer-links">
-          <h4>روابط سريعة</h4>
-          <a href="index.html#home">الرئيسية</a>
-          <a href="index.html#products">المنتجات</a>
-          <a href="index.html#categories">الأقسام</a>
-          <a href="index.html#about">من نحن</a>
-        </div>
-        <div class="footer-links">
-          <h4>خدمة العملاء</h4>
-          <a href="#">سياسة الإرجاع</a>
-          <a href="#">الشحن والتوصيل</a>
-          <a href="#">الأسئلة الشائعة</a>
-          <a href="index.html#contact">تواصل معنا</a>
-        </div>
-        <div class="footer-newsletter">
-          <h4>النشرة البريدية</h4>
-          <p>اشترك ليصلك أحدث العروض والمجموعات</p>
-          <form class="newsletter-form">
-            <input type="email" placeholder="بريدك الإلكتروني" />
-            <button type="submit">اشترك</button>
-          </form>
-        </div>
+        <div class="footer-brand"><a href="index.html" class="logo"><span class="logo-mark">A</span><span class="logo-text">ATHAR</span></a><p>أكثر من مجرد ملابس.. أسلوب حياة</p></div>
+        <div class="footer-links"><h4>روابط سريعة</h4><a href="index.html#home">الرئيسية</a><a href="index.html#products">المنتجات</a><a href="track.html">متابعة الطلب</a></div>
+        <div class="footer-links"><h4>خدمة العملاء</h4><a href="#">سياسة الإرجاع</a><a href="#">الشحن والتوصيل</a><a href="track.html">متابعة الطلب</a></div>
+        <div class="footer-newsletter"><h4>النشرة البريدية</h4><p>اشترك ليصلك أحدث العروض</p><form class="newsletter-form"><input type="email" placeholder="بريدك الإلكتروني" /><button type="submit">اشترك</button></form></div>
       </div>
-      <div class="footer-bottom">
-        <p>© 2026 ATHAR | أَثَر. جميع الحقوق محفوظة.</p>
-      </div>
+      <div class="footer-bottom"><p>© 2026 ATHAR | أَثَر. جميع الحقوق محفوظة.</p></div>
     </div>
   </footer>
-
   <script src="script.js"></script>
   <script>
-    // Cart page specific rendering
     function renderCartPage() {
       const cart = getCart();
       const content = document.getElementById('cartContent');
       const countEl = document.getElementById('cartItemsCount');
-      
       const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
-      countEl.textContent = totalItems === 0 ? 'السلة فارغة' : `${totalItems} منتج${totalItems > 1 ? 'ات' : ''}`;
-
+      countEl.textContent = totalItems === 0 ? 'السلة فارغة' : totalItems + ' منتج' + (totalItems > 1 ? 'ات' : '');
       if (cart.length === 0) {
-        content.innerHTML = `
-          <div class="empty-cart">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-              <path d="M6 6h15l-1.5 9h-12z"></path>
-              <circle cx="9" cy="20" r="1"></circle>
-              <circle cx="18" cy="20" r="1"></circle>
-              <path d="M6 6L5 2H2"></path>
-            </svg>
-            <h2>سلتك فارغة</h2>
-            <p>لم تضف أي منتجات بعد. ابدأ التسوق الآن!</p>
-            <a href="index.html#products" class="btn btn-gold">تسوق الآن</a>
-          </div>
-        `;
+        content.innerHTML = `<div class="empty-cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 6h15l-1.5 9h-12z"></path><circle cx="9" cy="20" r="1"></circle><circle cx="18" cy="20" r="1"></circle><path d="M6 6L5 2H2"></path></svg><h2>سلتك فارغة</h2><p>لم تضف أي منتجات بعد. ابدأ التسوق الآن!</p><a href="index.html#products" class="btn btn-gold">تسوق الآن</a></div>`;
         return;
       }
-
       let itemsHtml = cart.map(item => `
         <div class="cart-item" data-id="${item.id}">
-          <div class="cart-item-img">
-            <img src="${item.image}" alt="${item.name}" />
-          </div>
+          <div class="cart-item-img"><img src="${item.image}" alt="${item.name}" /></div>
           <div class="cart-item-info">
             <div class="cart-item-name">${item.name}</div>
             <div class="cart-item-price">${item.price} ج.م</div>
@@ -375,74 +126,61 @@
               <button class="remove-btn" onclick="removeFromCart('${item.id}')">حذف</button>
             </div>
           </div>
-        </div>
-      `).join('');
-
+        </div>`).join('');
       const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
       const shipping = subtotal >= 500 ? 0 : 40;
       const total = subtotal + shipping;
-
-      content.innerHTML = `
-        <div class="cart-layout">
-          <div class="cart-items">
-            ${itemsHtml}
-          </div>
-          <div class="cart-summary">
-            <h3>ملخص الطلب</h3>
-            <div class="summary-row">
-              <span>المجموع الفرعي</span>
-              <span>${subtotal} ج.م</span>
-            </div>
-            <div class="summary-row">
-              <span>الشحن</span>
-              <span>${shipping === 0 ? 'مجاني' : shipping + ' ج.م'}</span>
-            </div>
-            <div class="summary-row total">
-              <span>الإجمالي</span>
-              <span class="gold">${total} ج.م</span>
-            </div>
-            <button class="btn btn-gold checkout-btn" onclick="checkout()">
-              إتمام الشراء
-            </button>
-            <p style="text-align:center;font-size:12px;color:var(--text-muted);margin-top:12px;">
-              الشحن مجاني للطلبات فوق 500 ج.م
-            </p>
-          </div>
-        </div>
-      `;
+      content.innerHTML = `<div class="cart-layout"><div class="cart-items">${itemsHtml}</div>
+        <div class="cart-summary"><h3>ملخص الطلب</h3>
+          <div class="summary-row"><span>المجموع الفرعي</span><span>${subtotal} ج.م</span></div>
+          <div class="summary-row"><span>الشحن</span><span>${shipping === 0 ? 'مجاني' : shipping + ' ج.م'}</span></div>
+          <div class="summary-row total"><span>الإجمالي</span><span class="gold">${total} ج.م</span></div>
+          <button class="btn btn-gold checkout-btn" onclick="checkout()">إتمام الشراء</button>
+          <p style="text-align:center;font-size:12px;color:var(--text-muted);margin-top:12px;">الشحن مجاني للطلبات فوق 500 ج.م</p>
+        </div></div>`;
     }
-
     function updateQty(id, change) {
       let cart = getCart();
       const item = cart.find(i => i.id === id);
       if (!item) return;
       item.qty += change;
-      if (item.qty <= 0) {
-        cart = cart.filter(i => i.id !== id);
-      }
-      saveCart(cart);
-      renderCartPage();
-      updateCartCount();
+      if (item.qty <= 0) cart = cart.filter(i => i.id !== id);
+      saveCart(cart); renderCartPage(); updateCartCount();
     }
-
     function removeFromCart(id) {
-      let cart = getCart().filter(i => i.id !== id);
-      saveCart(cart);
-      renderCartPage();
-      updateCartCount();
+      saveCart(getCart().filter(i => i.id !== id));
+      renderCartPage(); updateCartCount();
     }
-
     function checkout() {
       const cart = getCart();
       if (cart.length === 0) return;
-      alert('شكراً لطلبك!\n\nسيتم التواصل معك قريباً لتأكيد الطلب.\n\n(هذه نسخة تجريبية — يمكن ربطها بواتساب أو نظام دفع حقيقي)');
-    }
-
-    // Init
-    document.addEventListener('DOMContentLoaded', () => {
-      renderCartPage();
+      const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+      const shipping = subtotal >= 500 ? 0 : 40;
+      const total = subtotal + shipping;
+      const orderId = 'ATH-' + Date.now().toString().slice(-6);
+      const now = new Date();
+      const dateStr = now.toLocaleDateString('ar-EG', { year: 'numeric', month: 'long', day: 'numeric' });
+      const order = {
+        id: orderId,
+        items: cart.map(i => ({ name: i.name, price: i.price, qty: i.qty, image: i.image })),
+        total: total,
+        status: 'pending',
+        date: dateStr,
+        dates: [dateStr, '', '', '']
+      };
+      let orders = [];
+      try { orders = JSON.parse(localStorage.getItem('athar_orders')) || []; } catch(e) {}
+      orders.unshift(order);
+      localStorage.setItem('athar_orders', JSON.stringify(orders));
+      saveCart([]);
       updateCartCount();
-    });
+      if (confirm('تم استلام طلبك بنجاح!\n\nرقم الطلب: ' + orderId + '\n\nهل تريد متابعة الطلب الآن؟')) {
+        window.location.href = 'track.html?id=' + orderId;
+      } else {
+        renderCartPage();
+      }
+    }
+    document.addEventListener('DOMContentLoaded', () => { renderCartPage(); updateCartCount(); });
   </script>
 </body>
 </html>
