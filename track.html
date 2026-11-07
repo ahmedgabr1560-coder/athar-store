@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>متابعة الطلب | ATHAR</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .track-page { padding: 120px 0 80px; min-height: 70vh; }
+    .track-box { max-width: 560px; margin: 0 auto; background: #fff; border-radius: 16px; padding: 36px 28px; box-shadow: var(--shadow); }
+    [data-theme="dark"] .track-box { background: var(--charcoal); }
+    .track-box h1 { font-size: 1.5rem; font-weight: 700; margin-bottom: 8px; text-align: center; }
+    .track-box .subtitle { text-align: center; color: var(--text-muted); font-size: 14px; margin-bottom: 28px; }
+    .track-form { display: flex; gap: 10px; margin-bottom: 28px; }
+    .track-form input { flex: 1; border: 1.5px solid var(--border); border-radius: 10px; padding: 14px 16px; font-family: inherit; font-size: 15px; background: transparent; color: var(--text); outline: none; }
+    .track-form input:focus { border-color: var(--gold); }
+    .track-form button { white-space: nowrap; padding: 14px 22px; }
+    .order-result { display: none; }
+    .order-result.show { display: block; }
+    .order-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+    .order-id { font-weight: 700; font-size: 16px; }
+    .status-badge { display: inline-block; padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 600; }
+    .status-pending { background: rgba(234,179,8,0.15); color: #ca8a04; }
+    .status-confirmed { background: rgba(59,130,246,0.15); color: #2563eb; }
+    .status-shipping { background: rgba(168,85,247,0.15); color: #7c3aed; }
+    .status-delivered { background: rgba(34,197,94,0.15); color: #16a34a; }
+    .status-cancelled { background: rgba(239,68,68,0.15); color: #dc2626; }
+    .timeline { position: relative; padding-right: 28px; margin-bottom: 28px; }
+    .timeline::before { content: ''; position: absolute; right: 7px; top: 8px; bottom: 8px; width: 2px; background: var(--border); }
+    .timeline-step { position: relative; padding-bottom: 24px; }
+    .timeline-step:last-child { padding-bottom: 0; }
+    .timeline-dot { position: absolute; right: -28px; top: 4px; width: 16px; height: 16px; border-radius: 50%; background: var(--border); border: 3px solid var(--off-white); }
+    [data-theme="dark"] .timeline-dot { border-color: var(--charcoal); }
+    .timeline-step.done .timeline-dot { background: var(--gold); }
+    .timeline-step.active .timeline-dot { background: var(--gold); box-shadow: 0 0 0 4px rgba(201,168,108,0.3); }
+    .timeline-step .step-title { font-weight: 600; font-size: 14px; margin-bottom: 2px; }
+    .timeline-step .step-date { font-size: 12px; color: var(--text-muted); }
+    .order-items { margin-bottom: 20px; }
+    .order-item { display: flex; gap: 12px; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--border); }
+    .order-item:last-child { border-bottom: none; }
+    .order-item img { width: 56px; height: 68px; object-fit: cover; border-radius: 8px; }
+    .order-item-info { flex: 1; }
+    .order-item-name { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+    .order-item-meta { font-size: 12px; color: var(--text-muted); }
+    .order-total { display: flex; justify-content: space-between; font-size: 16px; font-weight: 700; padding-top: 12px; border-top: 1px solid var(--border); }
+    .order-total .gold { color: var(--gold-dark); }
+    [data-theme="dark"] .order-total .gold { color: var(--gold); }
+    .not-found-msg { text-align: center; padding: 24px; color: var(--text-muted); font-size: 14px; }
+    .back-link { display: inline-flex; margin-bottom: 20px; font-size: 14px; color: var(--text-muted); }
+    .back-link:hover { color: var(--gold); }
+  </style>
+</head>
+<body>
+  <header class="header" id="header">
+    <div class="header-inner">
+      <div class="header-left">
+        <a href="cart.html" class="icon-btn cart-btn" aria-label="السلة">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 6h15l-1.5 9h-12z"></path><circle cx="9" cy="20" r="1"></circle><circle cx="18" cy="20" r="1"></circle><path d="M6 6L5 2H2"></path></svg>
+          <span class="cart-count">0</span>
+        </a>
+      </div>
+      <a href="index.html" class="logo">
+        <span class="logo-mark">A</span>
+        <span class="logo-text">ATHAR</span>
+        <span class="logo-sub">MEN'S FASHION</span>
+      </a>
+      <nav class="nav">
+        <a href="index.html#home" class="nav-link">الرئيسية</a>
+        <a href="index.html#products" class="nav-link">المنتجات</a>
+        <a href="cart.html" class="nav-link">السلة</a>
+        <a href="track.html" class="nav-link active">متابعة الطلب</a>
+      </nav>
+      <div class="header-right">
+        <button class="theme-toggle" id="themeToggle" aria-label="تبديل الوضع">
+          <svg class="sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"></path></svg>
+          <svg class="moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+        </button>
+        <button class="menu-toggle" id="menuToggle" aria-label="القائمة"><span></span><span></span><span></span></button>
+      </div>
+    </div>
+  </header>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="index.html#home">الرئيسية</a>
+    <a href="index.html#products">المنتجات</a>
+    <a href="cart.html">السلة</a>
+    <a href="track.html">متابعة الطلب</a>
+  </div>
+  <section class="track-page">
+    <div class="container">
+      <a href="index.html" class="back-link">← العودة للمتجر</a>
+      <div class="track-box">
+        <h1>متابعة الطلب</h1>
+        <p class="subtitle">أدخل رقم الطلب لمعرفة حالته</p>
+        <div class="track-form">
+          <input type="text" id="orderInput" placeholder="مثال: ATH-123456" />
+          <button class="btn btn-gold" onclick="trackOrder()">تتبع</button>
+        </div>
+        <div class="order-result" id="orderResult"></div>
+      </div>
+    </div>
+  </section>
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom"><p>© 2026 ATHAR | أَثَر. جميع الحقوق محفوظة.</p></div>
+    </div>
+  </footer>
+  <script src="script.js"></script>
+  <script>
+    const ORDERS_KEY = 'athar_orders';
+    const STATUS_MAP = {
+      pending: { label: 'قيد المراجعة', class: 'status-pending', step: 0 },
+      confirmed: { label: 'تم التأكيد', class: 'status-confirmed', step: 1 },
+      shipping: { label: 'جاري الشحن', class: 'status-shipping', step: 2 },
+      delivered: { label: 'تم التسليم', class: 'status-delivered', step: 3 },
+      cancelled: { label: 'ملغي', class: 'status-cancelled', step: -1 }
+    };
+    const STEPS = ['قيد المراجعة', 'تم التأكيد', 'جاري الشحن', 'تم التسليم'];
+    function getOrders() {
+      try { return JSON.parse(localStorage.getItem(ORDERS_KEY)) || []; }
+      catch { return []; }
+    }
+    function trackOrder() {
+      const input = document.getElementById('orderInput').value.trim().toUpperCase();
+      const result = document.getElementById('orderResult');
+      if (!input) { result.className = 'order-result show'; result.innerHTML = '<p class="not-found-msg">من فضلك أدخل رقم الطلب</p>'; return; }
+      const orders = getOrders();
+      const order = orders.find(o => o.id.toUpperCase() === input);
+      if (!order) {
+        result.className = 'order-result show';
+        result.innerHTML = '<p class="not-found-msg">لم يتم العثور على طلب بهذا الرقم.<br>تأكد من الرقم أو تواصل معنا.</p>';
+        return;
+      }
+      const st = STATUS_MAP[order.status] || STATUS_MAP.pending;
+      const stepIndex = st.step;
+      let timelineHtml = STEPS.map((title, i) => {
+        let cls = '';
+        if (stepIndex < 0) cls = '';
+        else if (i < stepIndex) cls = 'done';
+        else if (i === stepIndex) cls = 'active done';
+        const date = order.dates && order.dates[i] ? order.dates[i] : '';
+        return `<div class="timeline-step ${cls}"><div class="timeline-dot"></div><div class="step-title">${title}</div>${date ? `<div class="step-date">${date}</div>` : ''}</div>`;
+      }).join('');
+      const itemsHtml = (order.items || []).map(item => `
+        <div class="order-item">
+          <img src="${item.image || ''}" alt="${item.name}" onerror="this.style.display='none'" />
+          <div class="order-item-info">
+            <div class="order-item-name">${item.name}</div>
+            <div class="order-item-meta">${item.qty || 1} × ${item.price} ج.م</div>
+          </div>
+        </div>
+      `).join('');
+      result.className = 'order-result show';
+      result.innerHTML = `
+        <div class="order-header">
+          <div class="order-id">${order.id}</div>
+          <span class="status-badge ${st.class}">${st.label}</span>
+        </div>
+        <div class="timeline">${timelineHtml}</div>
+        <div class="order-items">${itemsHtml}</div>
+        <div class="order-total">
+          <span>الإجمالي</span>
+          <span class="gold">${order.total} ج.م</span>
+        </div>
+        ${order.date ? `<p style="margin-top:12px;font-size:12px;color:var(--text-muted);text-align:center">تاريخ الطلب: ${order.date}</p>` : ''}
+      `;
+    }
+    document.getElementById('orderInput')?.addEventListener('keydown', e => { if (e.key === 'Enter') trackOrder(); });
+    document.addEventListener('DOMContentLoaded', () => {
+      updateCartCount();
+      const params = new URLSearchParams(window.location.search);
+      const id = params.get('id');
+      if (id) { document.getElementById('orderInput').value = id; trackOrder(); }
+    });
+  </script>
+</body>
+</html>
