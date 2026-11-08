@@ -101,10 +101,10 @@
       <button type="button" class="tab-btn" data-tab="coupons">أكواد الخصم</button>
       <button type="button" class="tab-btn" data-tab="shipping">الشحن</button>
       <button type="button" class="tab-btn" data-tab="settings">إعدادات الموقع</button>
+      <button type="button" class="tab-btn" data-tab="visitors">الزوار</button>
     </div>
     <div class="container">
-      <div class="note"><strong>مهم:</strong> عدّل ثم اضغط <strong>نشر على GitHub</strong> لحفظ التغييرات على الموقع كله.</div>
-
+      <div class="note"><strong>مهم:</strong> عدّل ثم اضغط <strong>نشر على GitHub</strong>.</div>
       <div class="tab-content active" id="tab-products">
         <div class="stats">
           <div class="stat-card"><div class="label">المنتجات</div><div class="value" id="statProducts">0</div></div>
@@ -129,7 +129,6 @@
         <div class="table-wrap"><table><thead><tr><th>صورة</th><th>الاسم</th><th>السعر</th><th>خصم</th><th>إجراءات</th></tr></thead><tbody id="productsBody"></tbody></table>
         <div class="empty-state" id="emptyProducts" style="display:none">لا توجد منتجات</div></div>
       </div>
-
       <div class="tab-content" id="tab-orders">
         <div class="stats">
           <div class="stat-card"><div class="label">الكل</div><div class="value" id="statOrders">0</div></div>
@@ -141,7 +140,6 @@
         <div class="table-wrap"><table><thead><tr><th>رقم</th><th>العميل</th><th>المنتجات</th><th>الإجمالي</th><th>الحالة</th><th>تغيير</th></tr></thead><tbody id="ordersBody"></tbody></table>
         <div class="empty-state" id="emptyOrders" style="display:none">لا توجد طلبات</div></div>
       </div>
-
       <div class="tab-content" id="tab-coupons">
         <div class="stats">
           <div class="stat-card"><div class="label">الأكواد</div><div class="value" id="statCoupons">0</div></div>
@@ -164,7 +162,6 @@
         <div class="table-wrap"><table><thead><tr><th>الكود</th><th>النوع</th><th>القيمة</th><th>الوصف</th><th>الحالة</th><th>إجراءات</th></tr></thead><tbody id="couponsBody"></tbody></table>
         <div class="empty-state" id="emptyCoupons" style="display:none">لا توجد أكواد</div></div>
       </div>
-
       <div class="tab-content" id="tab-shipping">
         <div class="section-header"><h2>أسعار الشحن</h2></div>
         <div class="form-group" style="max-width:280px;margin-bottom:20px">
@@ -172,12 +169,9 @@
           <input type="number" id="freeShipMin" min="0" style="width:100%;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-family:inherit;font-size:14px" />
         </div>
         <div id="shippingList"></div>
-        <p style="font-size:12px;color:var(--muted);margin-top:12px">عدّل الأسعار ثم اضغط «نشر على GitHub»</p>
       </div>
-
       <div class="tab-content" id="tab-settings">
         <div class="section-header"><h2>إعدادات الموقع</h2></div>
-        <div class="note">من هنا بتتحكم في اسم المتجر، الهيرو، النصوص، التليفون، والفوتر — وبعدين تنشر.</div>
         <div class="form-card always">
           <div class="form-grid">
             <div class="form-group"><label>اسم المتجر (EN)</label><input type="text" id="sStoreName" /></div>
@@ -187,13 +181,13 @@
             <div class="form-group full"><label>عنوان الهيرو</label><input type="text" id="sHeroTitle" /></div>
             <div class="form-group full"><label>عنوان الهيرو (ذهبي)</label><input type="text" id="sHeroTitleGold" /></div>
             <div class="form-group full"><label>وصف الهيرو</label><input type="text" id="sHeroDesc" /></div>
-            <div class="form-group full"><label>صورة الهيرو (رابط)</label><input type="url" id="sHeroImage" /></div>
+            <div class="form-group full"><label>صورة الهيرو</label><input type="url" id="sHeroImage" /></div>
             <div class="form-group"><label>نص زر التسوق</label><input type="text" id="sHeroButton" /></div>
-            <div class="form-group"><label>عنوان قسم المنتجات</label><input type="text" id="sProductsTitle" /></div>
+            <div class="form-group"><label>عنوان المنتجات</label><input type="text" id="sProductsTitle" /></div>
             <div class="form-group"><label>عنوان من نحن</label><input type="text" id="sAboutTitle" /></div>
             <div class="form-group full"><label>نص من نحن</label><input type="text" id="sAboutText" /></div>
-            <div class="form-group"><label>رقم الهاتف</label><input type="text" id="sPhone" /></div>
-            <div class="form-group"><label>واتساب</label><input type="text" id="sWhatsapp" placeholder="2010xxxxxxxx" /></div>
+            <div class="form-group"><label>الهاتف</label><input type="text" id="sPhone" /></div>
+            <div class="form-group"><label>واتساب</label><input type="text" id="sWhatsapp" /></div>
             <div class="form-group"><label>الإيميل</label><input type="email" id="sEmail" /></div>
             <div class="form-group"><label>العنوان</label><input type="text" id="sAddress" /></div>
             <div class="form-group"><label>فيسبوك</label><input type="url" id="sFacebook" /></div>
@@ -202,9 +196,30 @@
           </div>
         </div>
       </div>
+      <div class="tab-content" id="tab-visitors">
+        <div class="section-header"><h2>الزوار</h2>
+          <button type="button" class="btn btn-outline btn-sm" id="refreshVisitsBtn">تحديث</button>
+        </div>
+        <div class="stats">
+          <div class="stat-card"><div class="label">إجمالي الزيارات</div><div class="value" id="statVisitsTotal">0</div></div>
+          <div class="stat-card"><div class="label">اليوم</div><div class="value" id="statVisitsToday">0</div></div>
+        </div>
+        <div id="visitsHistory"></div>
+      </div>
     </div>
   </div>
   <div class="toast" id="toast"></div>
-  <script src="admin-app.js"></script>
+  <script>
+  (function(){
+    var s = document.createElement('script');
+    s.src = 'admin-app.js?v=' + Date.now();
+    s.onerror = function() {
+      var s2 = document.createElement('script');
+      s2.src = 'https://cdn.jsdelivr.net/gh/ahmedgabr1560-coder/athar-store@main/admin-app.js?v=' + Date.now();
+      document.body.appendChild(s2);
+    };
+    document.body.appendChild(s);
+  })();
+  </script>
 </body>
 </html>
