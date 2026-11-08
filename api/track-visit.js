@@ -1,8 +1,13 @@
 module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   if (req.method === 'OPTIONS') return res.status(200).end();
+
+  if (req.method === 'GET') {
+    return res.status(200).json({ ok: true, tip: 'use data/visits.json' });
+  }
+
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   try {
@@ -12,12 +17,12 @@ module.exports = async function handler(req, res) {
     const FILE_PATH = 'data/visits.json';
 
     if (!GITHUB_TOKEN) {
-      return res.status(200).json({ success: true, localOnly: true });
+      return res.status(200).json({ success: true, localOnly: true, total: 0, today: 0 });
     }
 
-    const getUrl = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`;
+    const getUrl = 'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + FILE_PATH;
     const headers = {
-      Authorization: `Bearer ${GITHUB_TOKEN}`,
+      Authorization: 'Bearer ' + GITHUB_TOKEN,
       Accept: 'application/vnd.github+json',
       'User-Agent': 'ATHAR-Store'
     };
@@ -30,7 +35,7 @@ module.exports = async function handler(req, res) {
       sha = fileData.sha;
       try {
         data = JSON.parse(Buffer.from(fileData.content, 'base64').toString('utf8'));
-      } catch {}
+      } catch (e) {}
     }
 
     const today = new Date().toISOString().slice(0, 10);
@@ -47,22 +52,25 @@ module.exports = async function handler(req, res) {
     data.today = (data.today || 0) + 1;
 
     const content = Buffer.from(JSON.stringify(data, null, 2), 'utf8').toString('base64');
+    const body = {
+      message: 'Visit ' + today + ' (#' + data.total + ')',
+      content: content,
+      branch: 'main'
+    };
+    if (sha) body.sha = sha;
+
     const putRes = await fetch(getUrl, {
       method: 'PUT',
-      headers: { ...headers, 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        message: `Visit ${today} (#${data.total})`,
-        content,
-        branch: 'main',
-        ...(sha ? { sha } : {})
-      })
+      headers: Object.assign({}, headers, { 'Content-Type': 'application/json' }),
+      body: JSON.stringify(body)
     });
 
     if (!putRes.ok) {
-      return res.status(200).json({ success: false });
+      const errText = await putRes.text();
+      return res.status(200).json({ success: false, error: errText.slice(0, 200) });
     }
     return res.status(200).json({ success: true, total: data.total, today: data.today });
   } catch (err) {
-    return res.status(200).json({ success: false });
+    return res.status(200).json({ success: false, error: String(err.message || err) });
   }
 };
