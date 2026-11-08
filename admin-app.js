@@ -1,12 +1,13 @@
 (function() {
     var ADMIN_PASS = 'athar2026';
-    var API = '/api/update-data';
+    var API = 'https://athar-store-nine.vercel.app/api/update-data';
     var adminPassword = '';
     var products = [];
     var coupons = [];
     var shipping = { freeShippingMin: 800, governorates: {} };
     var orders = [];
     var settings = {};
+    var visits = { total: 0, today: 0, history: [] };
     var currentTab = 'products';
 
     function showToast(msg, isError) {
@@ -49,13 +50,24 @@
       if (tab === 'shipping') renderShipping();
       if (tab === 'products') renderProducts();
       if (tab === 'settings') renderSettings();
+      if (tab === 'visitors') renderVisitors();
     }
 
     async function fetchJSON(url) {
       try {
-        var r = await fetch(url + '?t=' + Date.now());
-        if (!r.ok) return null;
-        return await r.json();
+        var paths = [];
+        if (url.indexOf('http') === 0) paths.push(url);
+        else {
+          paths.push('https://athar-store-nine.vercel.app/' + url);
+          paths.push('https://raw.githubusercontent.com/ahmedgabr1560-coder/athar-store/main/' + url);
+        }
+        for (var i = 0; i < paths.length; i++) {
+          try {
+            var r = await fetch(paths[i] + (paths[i].indexOf('?') >= 0 ? '&' : '?') + 't=' + Date.now());
+            if (r.ok) return await r.json();
+          } catch (e) {}
+        }
+        return null;
       } catch (e) { return null; }
     }
 
@@ -70,6 +82,8 @@
       if (Array.isArray(o)) orders = o;
       var st = await fetchJSON('data/settings.json');
       if (st && typeof st === 'object') settings = st;
+      var v = await fetchJSON('data/visits.json');
+      if (v && typeof v === 'object') visits = v;
       try {
         var local = JSON.parse(localStorage.getItem('athar_orders') || '[]');
         if (local.length) {
@@ -84,6 +98,7 @@
       renderCoupons();
       renderShipping();
       renderSettings();
+      renderVisitors();
     }
 
     async function publish(file, data) {
@@ -209,22 +224,11 @@
       tbody.innerHTML = orders.map(function(o, i) {
         var cust = o.customer || {};
         var items = (o.items||[]).map(function(it){ return it.name + '×' + (it.qty||1); }).join('، ');
-        return '<tr>' +
-          '<td style="font-weight:700;font-size:11px">' + o.id + '<br><span style="font-weight:400;color:var(--muted)">' + (o.date||'') + '</span></td>' +
-          '<td><div class="order-detail"><strong style="color:var(--text)">' + (cust.name||'—') + '</strong><br>' + (cust.phone||'') + '<br>' + (cust.governorate||'') + ' - ' + (cust.center||'') + '<br>' + (cust.address||'') + '</div></td>' +
-          '<td><div class="order-detail">' + items + '</div></td>' +
-          '<td style="font-weight:600">' + o.total + ' ج.م</td>' +
-          '<td><span class="badge ' + (STATUS_BADGE[o.status]||'badge-pending') + '">' + (STATUS_LABELS[o.status]||o.status) + '</span></td>' +
-          '<td><select class="status-select" data-oi="' + i + '">' +
-          ['pending','confirmed','shipping','delivered','cancelled'].map(function(s) {
-            return '<option value="' + s + '"' + (o.status===s?' selected':'') + '>' + STATUS_LABELS[s] + '</option>';
-          }).join('') +
-          '</select></td></tr>';
+        return '<tr><td style="font-weight:700;font-size:11px">' + o.id + '<br><span style="font-weight:400;color:var(--muted)">' + (o.date||'') + '</span></td><td><div class="order-detail"><strong style="color:var(--text)">' + (cust.name||'—') + '</strong><br>' + (cust.phone||'') + '<br>' + (cust.governorate||'') + ' - ' + (cust.center||'') + '<br>' + (cust.address||'') + '</div></td><td><div class="order-detail">' + items + '</div></td><td style="font-weight:600">' + o.total + ' ج.م</td><td><span class="badge ' + (STATUS_BADGE[o.status]||'badge-pending') + '">' + (STATUS_LABELS[o.status]||o.status) + '</span></td><td><select class="status-select" data-oi="' + i + '">' + ['pending','confirmed','shipping','delivered','cancelled'].map(function(s){ return '<option value="' + s + '"' + (o.status===s?' selected':'') + '>' + STATUS_LABELS[s] + '</option>'; }).join('') + '</select></td></tr>';
       }).join('');
       tbody.querySelectorAll('.status-select').forEach(function(sel) {
         sel.onchange = function() {
-          var idx = +sel.getAttribute('data-oi');
-          orders[idx].status = sel.value;
+          orders[+sel.getAttribute('data-oi')].status = sel.value;
           renderOrders();
           showToast('تم تغيير الحالة — انشر لحفظها');
         };
@@ -354,6 +358,18 @@
       });
     }
 
+    function renderVisitors() {
+      var t = document.getElementById('statVisitsTotal');
+      var d = document.getElementById('statVisitsToday');
+      var hist = document.getElementById('visitsHistory');
+      if (t) t.textContent = (visits && visits.total) || 0;
+      if (d) d.textContent = (visits && visits.today) || 0;
+      if (hist) {
+        var h = (visits && visits.history) || [];
+        hist.innerHTML = h.length ? '<div class="table-wrap"><table><thead><tr><th>التاريخ</th><th>الزيارات</th></tr></thead><tbody>' + h.map(function(x){ return '<tr><td>' + x.date + '</td><td style="font-weight:700;color:var(--gold)">' + x.count + '</td></tr>'; }).join('') + '</tbody></table></div>' : '<p class="empty-state">لا يوجد سجل بعد</p>';
+      }
+    }
+
     function bindUI() {
       window.__adminLogin = login;
       var loginBtn = document.getElementById('loginBtn');
@@ -388,6 +404,8 @@
       if (cancelC) cancelC.onclick = function() { document.getElementById('couponForm').classList.remove('open'); };
       var refreshO = document.getElementById('refreshOrdersBtn');
       if (refreshO) refreshO.onclick = function() { loadAll().then(function(){ showToast('تم التحديث'); }); };
+      var refreshV = document.getElementById('refreshVisitsBtn');
+      if (refreshV) refreshV.onclick = function() { loadAll().then(function(){ showToast('تم تحديث الزوار'); renderVisitors(); }); };
     }
 
     if (document.readyState === 'loading') {
