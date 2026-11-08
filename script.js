@@ -1,4 +1,4 @@
-// ATHAR Store — Cart + Dynamic Products from GitHub data/products.json
+// ATHAR Store — Cart + Dynamic Products + Site Settings
 
 const CART_KEY = 'athar_cart';
 const PRODUCTS_URL = 'data/products.json';
@@ -124,7 +124,72 @@ function bindProductButtons() {
   });
 }
 
+async function applySiteSettings() {
+  try {
+    const res = await fetch('data/settings.json?t=' + Date.now());
+    if (!res.ok) return;
+    const s = await res.json();
+    if (!s) return;
+
+    document.querySelectorAll('.logo-text').forEach(el => { if (s.storeName) el.textContent = s.storeName; });
+    document.querySelectorAll('.logo-sub').forEach(el => { if (s.tagline) el.textContent = s.tagline; });
+    document.querySelectorAll('.logo-mark').forEach(el => {
+      if (s.storeName) el.textContent = s.storeName.charAt(0);
+    });
+
+    const badge = document.querySelector('.hero-badge');
+    if (badge && s.heroBadge) badge.textContent = s.heroBadge;
+
+    const title = document.querySelector('.hero-title');
+    if (title && (s.heroTitle || s.heroTitleGold)) {
+      title.innerHTML = (s.heroTitle || '') + '<br /><span class="gold">' + (s.heroTitleGold || '') + '</span>';
+    }
+
+    const desc = document.querySelector('.hero-desc');
+    if (desc && s.heroDesc) desc.textContent = s.heroDesc;
+
+    const heroImg = document.querySelector('.hero-img');
+    if (heroImg && s.heroImage) heroImg.src = s.heroImage;
+
+    const heroBtn = document.querySelector('.hero-content .btn-gold');
+    if (heroBtn && s.heroButton) {
+      const svg = heroBtn.querySelector('svg');
+      heroBtn.innerHTML = s.heroButton + (svg ? svg.outerHTML : '');
+    }
+
+    const prodTitle = document.querySelector('#products .section-title');
+    if (prodTitle && s.productsTitle) prodTitle.textContent = s.productsTitle;
+
+    const aboutTitle = document.querySelector('#about .section-title, #about h2');
+    if (aboutTitle && s.aboutTitle) aboutTitle.textContent = s.aboutTitle;
+    const aboutText = document.querySelector('#about p, .about-text');
+    if (aboutText && s.aboutText) aboutText.textContent = s.aboutText;
+
+    document.querySelectorAll('[data-setting="phone"]').forEach(el => {
+      if (s.contactPhone) { el.textContent = s.contactPhone; if (el.tagName === 'A') el.href = 'tel:' + s.contactPhone; }
+    });
+    document.querySelectorAll('[data-setting="email"]').forEach(el => {
+      if (s.contactEmail) { el.textContent = s.contactEmail; if (el.tagName === 'A') el.href = 'mailto:' + s.contactEmail; }
+    });
+    document.querySelectorAll('[data-setting="address"]').forEach(el => {
+      if (s.contactAddress) el.textContent = s.contactAddress;
+    });
+    document.querySelectorAll('[data-setting="whatsapp"]').forEach(el => {
+      if (s.contactWhatsapp) el.href = 'https://wa.me/' + s.contactWhatsapp.replace(/[^0-9]/g, '');
+    });
+
+    const footer = document.querySelector('.footer-bottom p, .footer-copy');
+    if (footer && s.footerText) footer.textContent = s.footerText;
+
+    if (s.storeName) {
+      const ar = s.storeNameAr ? ' | ' + s.storeNameAr : '';
+      document.title = s.storeName + ar + ' — ' + (s.tagline || "Men's Fashion");
+    }
+  } catch (e) {}
+}
+
 document.addEventListener('DOMContentLoaded', () => {
+  applySiteSettings();
   const themeToggle = document.getElementById('themeToggle');
   const html = document.documentElement;
   if (localStorage.getItem('athar-theme') === 'dark') html.setAttribute('data-theme', 'dark');
