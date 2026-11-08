@@ -4,48 +4,62 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>السلة | ATHAR — أَثَر</title>
-  <meta name="description" content="سلة التسوق - ATHAR | أَثَر" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
   <style>
     .cart-page { padding: 120px 0 80px; min-height: 70vh; }
-    .cart-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 40px; flex-wrap: wrap; gap: 16px; }
+    .cart-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 32px; flex-wrap: wrap; gap: 16px; }
     .cart-header h1 { font-size: 1.8rem; font-weight: 700; }
     .cart-count-text { color: var(--text-muted); font-size: 14px; }
-    .cart-layout { display: grid; grid-template-columns: 1fr; gap: 32px; }
-    @media (min-width: 900px) { .cart-layout { grid-template-columns: 1fr 360px; } }
-    .cart-items { display: flex; flex-direction: column; gap: 16px; }
-    .cart-item { display: flex; gap: 16px; background: #fff; border-radius: var(--radius); padding: 16px; box-shadow: var(--shadow); align-items: center; }
+    .cart-layout { display: grid; grid-template-columns: 1fr; gap: 28px; }
+    @media (min-width: 960px) { .cart-layout { grid-template-columns: 1fr 380px; } }
+    .cart-items { display: flex; flex-direction: column; gap: 14px; }
+    .cart-item { display: flex; gap: 14px; background: #fff; border-radius: var(--radius); padding: 14px; box-shadow: var(--shadow); align-items: center; }
     [data-theme="dark"] .cart-item { background: var(--charcoal); }
-    .cart-item-img { width: 90px; height: 110px; border-radius: 8px; overflow: hidden; flex-shrink: 0; background: #eee; }
+    .cart-item-img { width: 80px; height: 100px; border-radius: 8px; overflow: hidden; flex-shrink: 0; background: #eee; }
     .cart-item-img img { width: 100%; height: 100%; object-fit: cover; }
     .cart-item-info { flex: 1; min-width: 0; }
-    .cart-item-name { font-size: 15px; font-weight: 600; margin-bottom: 6px; }
-    .cart-item-price { font-size: 15px; font-weight: 700; color: var(--gold-dark); }
+    .cart-item-name { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+    .cart-item-price { font-size: 14px; font-weight: 700; color: var(--gold-dark); }
     [data-theme="dark"] .cart-item-price { color: var(--gold); }
-    .cart-item-actions { display: flex; align-items: center; gap: 12px; margin-top: 10px; }
-    .qty-control { display: flex; align-items: center; gap: 0; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
-    .qty-btn { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; background: var(--cream); color: var(--text); font-size: 16px; font-weight: 600; transition: var(--transition); }
+    .cart-item-actions { display: flex; align-items: center; gap: 10px; margin-top: 8px; }
+    .qty-control { display: flex; align-items: center; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+    .qty-btn { width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; background: var(--cream); color: var(--text); font-size: 15px; font-weight: 600; }
     [data-theme="dark"] .qty-btn { background: rgba(255,255,255,0.08); }
     .qty-btn:hover { background: var(--gold); color: #111; }
-    .qty-value { width: 36px; text-align: center; font-weight: 600; font-size: 14px; }
-    .remove-btn { color: #c44; font-size: 13px; font-weight: 500; padding: 4px 8px; border-radius: 6px; transition: var(--transition); }
+    .qty-value { width: 32px; text-align: center; font-weight: 600; font-size: 13px; }
+    .remove-btn { color: #c44; font-size: 12px; font-weight: 500; padding: 4px 8px; border-radius: 6px; }
     .remove-btn:hover { background: rgba(204,68,68,0.1); }
-    .cart-summary { background: #fff; border-radius: var(--radius); padding: 24px; box-shadow: var(--shadow); height: fit-content; position: sticky; top: 100px; }
-    [data-theme="dark"] .cart-summary { background: var(--charcoal); }
-    .cart-summary h3 { font-size: 1.2rem; margin-bottom: 20px; font-weight: 700; }
-    .summary-row { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 14px; }
-    .summary-row.total { font-size: 18px; font-weight: 700; padding-top: 16px; border-top: 1px solid var(--border); margin-top: 8px; }
+    .cart-sidebar { display: flex; flex-direction: column; gap: 16px; }
+    .panel { background: #fff; border-radius: var(--radius); padding: 22px; box-shadow: var(--shadow); }
+    [data-theme="dark"] .panel { background: var(--charcoal); }
+    .panel h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 16px; }
+    .form-group { margin-bottom: 14px; }
+    .form-group label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 6px; color: var(--text-muted); }
+    .form-group input, .form-group select, .form-group textarea { width: 100%; border: 1.5px solid var(--border); border-radius: 10px; padding: 11px 14px; font-family: inherit; font-size: 14px; background: transparent; color: var(--text); outline: none; }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--gold); }
+    .form-group textarea { min-height: 70px; resize: vertical; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    @media (max-width: 480px) { .form-row { grid-template-columns: 1fr; } }
+    .coupon-row { display: flex; gap: 8px; }
+    .coupon-row input { flex: 1; }
+    .coupon-row button { white-space: nowrap; padding: 0 16px; border-radius: 10px; background: var(--charcoal); color: #fff; font-family: inherit; font-weight: 600; font-size: 13px; border: none; cursor: pointer; }
+    [data-theme="dark"] .coupon-row button { background: var(--gold); color: #111; }
+    .coupon-msg { font-size: 12px; margin-top: 6px; }
+    .coupon-msg.ok { color: #16a34a; }
+    .coupon-msg.err { color: #dc2626; }
+    .summary-row { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 14px; }
+    .summary-row.total { font-size: 17px; font-weight: 700; padding-top: 14px; border-top: 1px solid var(--border); margin-top: 6px; }
     .summary-row .gold { color: var(--gold-dark); }
     [data-theme="dark"] .summary-row .gold { color: var(--gold); }
-    .checkout-btn { width: 100%; margin-top: 24px; justify-content: center; padding: 16px; font-size: 16px; }
+    .summary-row .discount { color: #16a34a; }
+    .checkout-btn { width: 100%; margin-top: 18px; justify-content: center; padding: 15px; font-size: 15px; }
     .empty-cart { text-align: center; padding: 60px 20px; }
-    .empty-cart svg { width: 80px; height: 80px; color: var(--text-muted); margin-bottom: 20px; opacity: 0.5; }
     .empty-cart h2 { font-size: 1.4rem; margin-bottom: 12px; }
     .empty-cart p { color: var(--text-muted); margin-bottom: 28px; }
-    .continue-shopping { display: inline-flex; }
+    .required { color: #e11; }
   </style>
 </head>
 <body>
@@ -56,15 +70,11 @@
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 6h15l-1.5 9h-12z"></path><circle cx="9" cy="20" r="1"></circle><circle cx="18" cy="20" r="1"></circle><path d="M6 6L5 2H2"></path></svg>
           <span class="cart-count">0</span>
         </a>
-        <button class="icon-btn" aria-label="الحساب"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"></circle><path d="M4 20c0-4 4-6 8-6s8 2 8 6"></path></svg></button>
-        <div class="search-box"><input type="text" placeholder="ابحث عن منتج..." /><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg></div>
       </div>
       <a href="index.html" class="logo"><span class="logo-mark">A</span><span class="logo-text">ATHAR</span><span class="logo-sub">MEN'S FASHION</span></a>
       <nav class="nav">
         <a href="index.html#home" class="nav-link">الرئيسية</a>
         <a href="index.html#products" class="nav-link">المنتجات</a>
-        <a href="index.html#categories" class="nav-link">الأقسام</a>
-        <a href="index.html#about" class="nav-link">من نحن</a>
         <a href="track.html" class="nav-link">متابعة الطلب</a>
       </nav>
       <div class="header-right">
@@ -77,30 +87,83 @@
     </div>
   </header>
   <div class="mobile-menu" id="mobileMenu">
-    <a href="index.html#home">الرئيسية</a><a href="index.html#products">المنتجات</a><a href="index.html#categories">الأقسام</a><a href="index.html#about">من نحن</a><a href="track.html">متابعة الطلب</a>
+    <a href="index.html#home">الرئيسية</a><a href="index.html#products">المنتجات</a><a href="track.html">متابعة الطلب</a>
   </div>
   <section class="cart-page">
     <div class="container">
       <div class="cart-header">
         <div><h1>سلة التسوق</h1><p class="cart-count-text" id="cartItemsCount">0 منتجات</p></div>
-        <a href="index.html#products" class="btn btn-outline continue-shopping">متابعة التسوق ←</a>
+        <a href="index.html#products" class="btn btn-outline">متابعة التسوق ←</a>
       </div>
       <div id="cartContent"></div>
     </div>
   </section>
-  <footer class="footer">
-    <div class="container">
-      <div class="footer-grid">
-        <div class="footer-brand"><a href="index.html" class="logo"><span class="logo-mark">A</span><span class="logo-text">ATHAR</span></a><p>أكثر من مجرد ملابس.. أسلوب حياة</p></div>
-        <div class="footer-links"><h4>روابط سريعة</h4><a href="index.html#home">الرئيسية</a><a href="index.html#products">المنتجات</a><a href="track.html">متابعة الطلب</a></div>
-        <div class="footer-links"><h4>خدمة العملاء</h4><a href="#">سياسة الإرجاع</a><a href="#">الشحن والتوصيل</a><a href="track.html">متابعة الطلب</a></div>
-        <div class="footer-newsletter"><h4>النشرة البريدية</h4><p>اشترك ليصلك أحدث العروض</p><form class="newsletter-form"><input type="email" placeholder="بريدك الإلكتروني" /><button type="submit">اشترك</button></form></div>
-      </div>
-      <div class="footer-bottom"><p>© 2026 ATHAR | أَثَر. جميع الحقوق محفوظة.</p></div>
-    </div>
-  </footer>
+  <footer class="footer"><div class="container"><div class="footer-bottom"><p>© 2026 ATHAR | أَثَر. جميع الحقوق محفوظة.</p></div></div></footer>
   <script src="script.js"></script>
   <script>
+    const SHIPPING = {
+      'القاهرة': { base: 40, centers: { 'مصر الجديدة': 40, 'مدينة نصر': 40, 'المعادي': 45, 'حلوان': 50, 'الشروق': 55, 'التجمع': 50, 'أخرى': 45 } },
+      'الجيزة': { base: 45, centers: { 'الدقي': 45, 'المهندسين': 45, 'الهرم': 50, 'فيصل': 50, '6 أكتوبر': 55, 'الشيخ زايد': 55, 'أخرى': 50 } },
+      'الإسكندرية': { base: 55, centers: { 'سموحة': 55, 'المنتزه': 60, 'العجمي': 65, 'برج العرب': 70, 'أخرى': 60 } },
+      'القليوبية': { base: 50, centers: { 'بنها': 50, 'شبرا الخيمة': 45, 'قليوب': 50, 'الخانكة': 55, 'أخرى': 55 } },
+      'الشرقية': { base: 60, centers: { 'الزقازيق': 60, 'العاشر من رمضان': 55, 'بلبيس': 65, 'أبو حماد': 65, 'أخرى': 65 } },
+      'الدقهلية': { base: 65, centers: { 'المنصورة': 65, 'طلخا': 70, 'ميت غمر': 70, 'أخرى': 70 } },
+      'الغربية': { base: 60, centers: { 'طنطا': 60, 'المحلة': 65, 'كفر الزيات': 65, 'زفتى': 70, 'أخرى': 70 } },
+      'المنوفية': { base: 60, centers: { 'شبين الكوم': 60, 'منوف': 65, 'قويسنا': 65, 'أخرى': 70 } },
+      'البحيرة': { base: 70, centers: { 'دمنهور': 70, 'كفر الدوار': 70, 'رشيد': 75, 'أخرى': 75 } },
+      'كفر الشيخ': { base: 70, centers: { 'كفر الشيخ': 70, 'دسوق': 75, 'أخرى': 75 } },
+      'دمياط': { base: 70, centers: { 'دمياط': 70, 'رأس البر': 75, 'أخرى': 75 } },
+      'بورسعيد': { base: 70, centers: { 'بورسعيد': 70, 'أخرى': 75 } },
+      'الإسماعيلية': { base: 65, centers: { 'الإسماعيلية': 65, 'فايد': 70, 'أخرى': 70 } },
+      'السويس': { base: 70, centers: { 'السويس': 70, 'أخرى': 75 } },
+      'الفيوم': { base: 70, centers: { 'الفيوم': 70, 'أخرى': 75 } },
+      'بني سويف': { base: 75, centers: { 'بني سويف': 75, 'أخرى': 80 } },
+      'المنيا': { base: 80, centers: { 'المنيا': 80, 'أخرى': 85 } },
+      'أسيوط': { base: 85, centers: { 'أسيوط': 85, 'أخرى': 90 } },
+      'سوهاج': { base: 90, centers: { 'سوهاج': 90, 'أخرى': 95 } },
+      'قنا': { base: 95, centers: { 'قنا': 95, 'أخرى': 100 } },
+      'الأقصر': { base: 95, centers: { 'الأقصر': 95, 'أخرى': 100 } },
+      'أسوان': { base: 100, centers: { 'أسوان': 100, 'أخرى': 110 } },
+      'البحر الأحمر': { base: 110, centers: { 'الغردقة': 110, 'سفاجا': 120, 'أخرى': 120 } },
+      'جنوب سيناء': { base: 120, centers: { 'شرم الشيخ': 120, 'أخرى': 130 } },
+      'شمال سيناء': { base: 120, centers: { 'العريش': 120, 'أخرى': 130 } },
+      'مطروح': { base: 110, centers: { 'مرسى مطروح': 110, 'أخرى': 120 } },
+      'الوادي الجديد': { base: 130, centers: { 'الخارجة': 130, 'أخرى': 140 } }
+    };
+    const COUPONS = {
+      'ATHAR10': { type: 'percent', value: 10, label: 'خصم 10%' },
+      'ATHAR15': { type: 'percent', value: 15, label: 'خصم 15%' },
+      'WELCOME50': { type: 'fixed', value: 50, label: 'خصم 50 ج.م' },
+      'FREE50': { type: 'shipping', value: 0, label: 'شحن مجاني' }
+    };
+    let appliedCoupon = null, selectedGov = '', selectedCenter = '', formCache = {};
+
+    function getShippingCost() {
+      if (!selectedGov || !SHIPPING[selectedGov]) return 0;
+      const g = SHIPPING[selectedGov];
+      if (selectedCenter && g.centers[selectedCenter] != null) return g.centers[selectedCenter];
+      return g.base;
+    }
+    function calcDiscount(subtotal) {
+      if (!appliedCoupon) return { amount: 0, shippingOverride: null };
+      const c = appliedCoupon;
+      if (c.type === 'percent') return { amount: Math.round(subtotal * c.value / 100), shippingOverride: null };
+      if (c.type === 'fixed') return { amount: Math.min(c.value, subtotal), shippingOverride: null };
+      if (c.type === 'shipping') return { amount: 0, shippingOverride: 0 };
+      return { amount: 0, shippingOverride: null };
+    }
+    function cacheForm() {
+      ['custName','custPhone','custAddress','custNotes','couponInput'].forEach(id => {
+        const el = document.getElementById(id); if (el) formCache[id] = el.value;
+      });
+    }
+    function restoreFormFields() {
+      setTimeout(() => {
+        Object.keys(formCache).forEach(id => { const el = document.getElementById(id); if (el && formCache[id]) el.value = formCache[id]; });
+        const gov = document.getElementById('custGov'); if (gov && selectedGov) gov.value = selectedGov;
+        const cen = document.getElementById('custCenter'); if (cen && selectedCenter) cen.value = selectedCenter;
+      }, 0);
+    }
     function renderCartPage() {
       const cart = getCart();
       const content = document.getElementById('cartContent');
@@ -108,77 +171,112 @@
       const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
       countEl.textContent = totalItems === 0 ? 'السلة فارغة' : totalItems + ' منتج' + (totalItems > 1 ? 'ات' : '');
       if (cart.length === 0) {
-        content.innerHTML = `<div class="empty-cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 6h15l-1.5 9h-12z"></path><circle cx="9" cy="20" r="1"></circle><circle cx="18" cy="20" r="1"></circle><path d="M6 6L5 2H2"></path></svg><h2>سلتك فارغة</h2><p>لم تضف أي منتجات بعد. ابدأ التسوق الآن!</p><a href="index.html#products" class="btn btn-gold">تسوق الآن</a></div>`;
+        content.innerHTML = '<div class="empty-cart" style="text-align:center;padding:60px 20px"><h2>سلتك فارغة</h2><p style="color:var(--text-muted);margin:12px 0 28px">لم تضف أي منتجات بعد</p><a href="index.html#products" class="btn btn-gold">تسوق الآن</a></div>';
         return;
       }
-      let itemsHtml = cart.map(item => `
-        <div class="cart-item" data-id="${item.id}">
-          <div class="cart-item-img"><img src="${item.image}" alt="${item.name}" /></div>
-          <div class="cart-item-info">
-            <div class="cart-item-name">${item.name}</div>
-            <div class="cart-item-price">${item.price} ج.م</div>
-            <div class="cart-item-actions">
-              <div class="qty-control">
-                <button class="qty-btn" onclick="updateQty('${item.id}', -1)">−</button>
-                <span class="qty-value">${item.qty}</span>
-                <button class="qty-btn" onclick="updateQty('${item.id}', 1)">+</button>
-              </div>
-              <button class="remove-btn" onclick="removeFromCart('${item.id}')">حذف</button>
-            </div>
+      const itemsHtml = cart.map(item => `<div class="cart-item" data-id="${item.id}">
+        <div class="cart-item-img"><img src="${item.image}" alt="${item.name}" /></div>
+        <div class="cart-item-info"><div class="cart-item-name">${item.name}</div><div class="cart-item-price">${item.price} ج.م</div>
+        <div class="cart-item-actions"><div class="qty-control">
+          <button class="qty-btn" onclick="updateQty('${item.id}', -1)">−</button>
+          <span class="qty-value">${item.qty}</span>
+          <button class="qty-btn" onclick="updateQty('${item.id}', 1)">+</button>
+        </div><button class="remove-btn" onclick="removeFromCart('${item.id}')">حذف</button></div></div></div>`).join('');
+      const govOptions = Object.keys(SHIPPING).map(g => `<option value="${g}" ${g===selectedGov?'selected':''}>${g}</option>`).join('');
+      let centerOptions = '<option value="">اختر المركز</option>';
+      if (selectedGov && SHIPPING[selectedGov]) {
+        centerOptions += Object.keys(SHIPPING[selectedGov].centers).map(c => `<option value="${c}" ${c===selectedCenter?'selected':''}>${c}</option>`).join('');
+      }
+      const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
+      let shipping = getShippingCost();
+      const disc = calcDiscount(subtotal);
+      if (disc.shippingOverride !== null) shipping = disc.shippingOverride;
+      else if (subtotal >= 800) shipping = 0;
+      const discountAmount = disc.amount;
+      const total = Math.max(0, subtotal - discountAmount) + shipping;
+      content.innerHTML = `<div class="cart-layout"><div class="cart-items">${itemsHtml}</div><div class="cart-sidebar">
+        <div class="panel"><h3>بيانات التوصيل</h3>
+          <div class="form-group"><label>الاسم بالكامل <span class="required">*</span></label><input type="text" id="custName" placeholder="الاسم الثلاثي" /></div>
+          <div class="form-group"><label>رقم الموبايل <span class="required">*</span></label><input type="tel" id="custPhone" placeholder="01xxxxxxxxx" maxlength="11" /></div>
+          <div class="form-row">
+            <div class="form-group"><label>المحافظة <span class="required">*</span></label>
+              <select id="custGov" onchange="onGovChange()"><option value="">اختر المحافظة</option>${govOptions}</select></div>
+            <div class="form-group"><label>المركز / المدينة <span class="required">*</span></label>
+              <select id="custCenter" onchange="onCenterChange()">${centerOptions}</select></div>
           </div>
-        </div>`).join('');
-      const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-      const shipping = subtotal >= 500 ? 0 : 40;
-      const total = subtotal + shipping;
-      content.innerHTML = `<div class="cart-layout"><div class="cart-items">${itemsHtml}</div>
-        <div class="cart-summary"><h3>ملخص الطلب</h3>
+          <div class="form-group"><label>العنوان بالتفصيل <span class="required">*</span></label><textarea id="custAddress" placeholder="الشارع، رقم العقار، علامة مميزة..."></textarea></div>
+          <div class="form-group"><label>ملاحظات (اختياري)</label><input type="text" id="custNotes" placeholder="مواعيد التوصيل..." /></div>
+        </div>
+        <div class="panel"><h3>كود الخصم</h3>
+          <div class="coupon-row"><input type="text" id="couponInput" placeholder="أدخل كود الخصم" style="text-transform:uppercase" /><button type="button" onclick="applyCoupon()">تطبيق</button></div>
+          <div class="coupon-msg" id="couponMsg"></div>
+        </div>
+        <div class="panel"><h3>ملخص الطلب</h3>
           <div class="summary-row"><span>المجموع الفرعي</span><span>${subtotal} ج.م</span></div>
-          <div class="summary-row"><span>الشحن</span><span>${shipping === 0 ? 'مجاني' : shipping + ' ج.م'}</span></div>
+          <div class="summary-row"><span>الشحن</span><span>${selectedGov ? (shipping===0?'مجاني':shipping+' ج.م') : '—'}</span></div>
+          <div class="summary-row" style="${discountAmount?'':'display:none'}"><span>الخصم</span><span class="discount">− ${discountAmount} ج.م</span></div>
           <div class="summary-row total"><span>الإجمالي</span><span class="gold">${total} ج.م</span></div>
-          <button class="btn btn-gold checkout-btn" onclick="checkout()">إتمام الشراء</button>
-          <p style="text-align:center;font-size:12px;color:var(--text-muted);margin-top:12px;">الشحن مجاني للطلبات فوق 500 ج.م</p>
-        </div></div>`;
+          <p style="font-size:11px;color:var(--text-muted);margin-top:8px">شحن مجاني للطلبات من 800 ج.م</p>
+          <button class="btn btn-gold checkout-btn" onclick="checkout()">تأكيد الطلب</button>
+        </div>
+      </div></div>`;
+    }
+    function onGovChange() { selectedGov = document.getElementById('custGov').value; selectedCenter = ''; cacheForm(); renderCartPage(); restoreFormFields(); }
+    function onCenterChange() { selectedCenter = document.getElementById('custCenter').value; cacheForm(); renderCartPage(); restoreFormFields(); }
+    function applyCoupon() {
+      const code = (document.getElementById('couponInput')?.value || '').trim().toUpperCase();
+      const msg = document.getElementById('couponMsg');
+      if (!code) { msg.textContent = 'أدخل كود الخصم'; msg.className = 'coupon-msg err'; return; }
+      if (!COUPONS[code]) { appliedCoupon = null; msg.textContent = 'كود غير صالح'; msg.className = 'coupon-msg err'; cacheForm(); renderCartPage(); restoreFormFields(); return; }
+      appliedCoupon = COUPONS[code]; formCache.couponInput = code;
+      cacheForm(); renderCartPage(); restoreFormFields();
+      const m = document.getElementById('couponMsg'); if (m) { m.textContent = 'تم تطبيق: ' + appliedCoupon.label; m.className = 'coupon-msg ok'; }
     }
     function updateQty(id, change) {
-      let cart = getCart();
-      const item = cart.find(i => i.id === id);
-      if (!item) return;
-      item.qty += change;
-      if (item.qty <= 0) cart = cart.filter(i => i.id !== id);
-      saveCart(cart); renderCartPage(); updateCartCount();
+      cacheForm(); let cart = getCart(); const item = cart.find(i => i.id === id); if (!item) return;
+      item.qty += change; if (item.qty <= 0) cart = cart.filter(i => i.id !== id);
+      saveCart(cart); renderCartPage(); restoreFormFields(); updateCartCount();
     }
     function removeFromCart(id) {
-      saveCart(getCart().filter(i => i.id !== id));
-      renderCartPage(); updateCartCount();
+      cacheForm(); saveCart(getCart().filter(i => i.id !== id)); renderCartPage(); restoreFormFields(); updateCartCount();
     }
     function checkout() {
-      const cart = getCart();
-      if (cart.length === 0) return;
-      const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-      const shipping = subtotal >= 500 ? 0 : 40;
-      const total = subtotal + shipping;
+      const cart = getCart(); if (!cart.length) return;
+      const name = (document.getElementById('custName')?.value || '').trim();
+      const phone = (document.getElementById('custPhone')?.value || '').trim();
+      const address = (document.getElementById('custAddress')?.value || '').trim();
+      const notes = (document.getElementById('custNotes')?.value || '').trim();
+      const gov = selectedGov || document.getElementById('custGov')?.value || '';
+      const center = selectedCenter || document.getElementById('custCenter')?.value || '';
+      if (!name) { alert('من فضلك أدخل الاسم'); return; }
+      if (!phone || !/^01[0-9]{9}$/.test(phone)) { alert('أدخل رقم موبايل صحيح (11 رقم يبدأ بـ 01)'); return; }
+      if (!gov) { alert('اختر المحافظة'); return; }
+      if (!center) { alert('اختر المركز / المدينة'); return; }
+      if (!address) { alert('أدخل العنوان بالتفصيل'); return; }
+      const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
+      let shipping = getShippingCost();
+      const disc = calcDiscount(subtotal);
+      if (disc.shippingOverride !== null) shipping = disc.shippingOverride;
+      else if (subtotal >= 800) shipping = 0;
+      const discountAmount = disc.amount;
+      const total = Math.max(0, subtotal - discountAmount) + shipping;
       const orderId = 'ATH-' + Date.now().toString().slice(-6);
-      const now = new Date();
-      const dateStr = now.toLocaleDateString('ar-EG', { year: 'numeric', month: 'long', day: 'numeric' });
+      const dateStr = new Date().toLocaleDateString('ar-EG', { year: 'numeric', month: 'long', day: 'numeric' });
       const order = {
         id: orderId,
         items: cart.map(i => ({ name: i.name, price: i.price, qty: i.qty, image: i.image })),
-        total: total,
-        status: 'pending',
-        date: dateStr,
-        dates: [dateStr, '', '', '']
+        subtotal, shipping, discount: discountAmount,
+        coupon: appliedCoupon ? appliedCoupon.label : null,
+        total,
+        customer: { name, phone, governorate: gov, center, address, notes },
+        status: 'pending', date: dateStr, dates: [dateStr, '', '', '']
       };
-      let orders = [];
-      try { orders = JSON.parse(localStorage.getItem('athar_orders')) || []; } catch(e) {}
-      orders.unshift(order);
-      localStorage.setItem('athar_orders', JSON.stringify(orders));
-      saveCart([]);
-      updateCartCount();
-      if (confirm('تم استلام طلبك بنجاح!\n\nرقم الطلب: ' + orderId + '\n\nهل تريد متابعة الطلب الآن؟')) {
+      let orders = []; try { orders = JSON.parse(localStorage.getItem('athar_orders')) || []; } catch(e) {}
+      orders.unshift(order); localStorage.setItem('athar_orders', JSON.stringify(orders));
+      saveCart([]); updateCartCount(); appliedCoupon = null; selectedGov = ''; selectedCenter = ''; formCache = {};
+      if (confirm('تم استلام طلبك!\n\nرقم الطلب: ' + orderId + '\nالإجمالي: ' + total + ' ج.م\n\nمتابعة الطلب؟')) {
         window.location.href = 'track.html?id=' + orderId;
-      } else {
-        renderCartPage();
-      }
+      } else { renderCartPage(); }
     }
     document.addEventListener('DOMContentLoaded', () => { renderCartPage(); updateCartCount(); });
   </script>
