@@ -167,7 +167,8 @@ function trackVisit() {
   try {
     if (sessionStorage.getItem('athar_visited')) return;
     sessionStorage.setItem('athar_visited', '1');
-    fetch('/api/track-visit', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' }).catch(function(){});
+    var opts = { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'visit' }) };
+    fetch('/api/update-data', opts).catch(function(){});
   } catch(e) {}
 }
 
