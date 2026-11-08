@@ -6,6 +6,7 @@
     var coupons = [];
     var shipping = { freeShippingMin: 800, governorates: {} };
     var orders = [];
+    var settings = {};
     var currentTab = 'products';
 
     function showToast(msg, isError) {
@@ -47,6 +48,7 @@
       if (tab === 'coupons') renderCoupons();
       if (tab === 'shipping') renderShipping();
       if (tab === 'products') renderProducts();
+      if (tab === 'settings') renderSettings();
     }
 
     async function fetchJSON(url) {
@@ -66,6 +68,8 @@
       if (s && s.governorates) shipping = s;
       var o = await fetchJSON('data/orders.json');
       if (Array.isArray(o)) orders = o;
+      var st = await fetchJSON('data/settings.json');
+      if (st && typeof st === 'object') settings = st;
       try {
         var local = JSON.parse(localStorage.getItem('athar_orders') || '[]');
         if (local.length) {
@@ -79,6 +83,7 @@
       renderOrders();
       renderCoupons();
       renderShipping();
+      renderSettings();
     }
 
     async function publish(file, data) {
@@ -110,6 +115,10 @@
         collectShippingFromUI();
         publish('shipping', shipping);
       } else if (currentTab === 'orders') publish('orders', orders);
+      else if (currentTab === 'settings') {
+        collectSettingsFromUI();
+        publish('settings', settings);
+      }
     }
 
     function renderProducts() {
@@ -216,10 +225,6 @@
         sel.onchange = function() {
           var idx = +sel.getAttribute('data-oi');
           orders[idx].status = sel.value;
-          var now = new Date().toLocaleDateString('ar-EG', { year:'numeric', month:'long', day:'numeric' });
-          if (!orders[idx].dates) orders[idx].dates = ['','','',''];
-          var stepMap = { pending:0, confirmed:1, shipping:2, delivered:3 };
-          if (stepMap[sel.value] !== undefined) orders[idx].dates[stepMap[sel.value]] = now;
           renderOrders();
           showToast('تم تغيير الحالة — انشر لحفظها');
         };
@@ -235,17 +240,7 @@
       empty.style.display = 'none';
       var typeLabel = { percent: 'نسبة %', fixed: 'مبلغ', shipping: 'شحن مجاني' };
       tbody.innerHTML = coupons.map(function(c, i) {
-        return '<tr>' +
-          '<td style="font-weight:700">' + c.code + '</td>' +
-          '<td>' + (typeLabel[c.type]||c.type) + '</td>' +
-          '<td>' + (c.type==='shipping' ? '—' : c.value) + '</td>' +
-          '<td>' + (c.label||'') + '</td>' +
-          '<td><span class="badge ' + (c.active !== false ? 'badge-on' : 'badge-off') + '">' + (c.active !== false ? 'مفعّل' : 'معطّل') + '</span></td>' +
-          '<td><div class="actions-cell">' +
-          '<button type="button" class="btn btn-outline btn-sm" data-ce="' + i + '">تعديل</button>' +
-          '<button type="button" class="btn btn-outline btn-sm" data-ct="' + i + '">' + (c.active !== false ? 'تعطيل' : 'تفعيل') + '</button>' +
-          '<button type="button" class="btn btn-danger btn-sm" data-cd="' + i + '">حذف</button>' +
-          '</div></td></tr>';
+        return '<tr><td style="font-weight:700">' + c.code + '</td><td>' + (typeLabel[c.type]||c.type) + '</td><td>' + (c.type==='shipping' ? '—' : c.value) + '</td><td>' + (c.label||'') + '</td><td><span class="badge ' + (c.active !== false ? 'badge-on' : 'badge-off') + '">' + (c.active !== false ? 'مفعّل' : 'معطّل') + '</span></td><td><div class="actions-cell"><button type="button" class="btn btn-outline btn-sm" data-ce="' + i + '">تعديل</button><button type="button" class="btn btn-outline btn-sm" data-ct="' + i + '">' + (c.active !== false ? 'تعطيل' : 'تفعيل') + '</button><button type="button" class="btn btn-danger btn-sm" data-cd="' + i + '">حذف</button></div></td></tr>';
       }).join('');
       tbody.querySelectorAll('[data-ce]').forEach(function(b) {
         b.onclick = function() {
@@ -301,13 +296,9 @@
       var html = '';
       Object.keys(govs).forEach(function(gov) {
         var g = govs[gov];
-        html += '<div class="ship-gov-card" data-gov="' + gov + '">';
-        html += '<h4>' + gov + ' <small style="color:var(--muted);font-weight:400">(أساسي: </small>';
-        html += '<input type="number" class="gov-base" data-gov="' + gov + '" value="' + g.base + '" style="width:70px;display:inline-block;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:6px;padding:4px 8px;color:var(--text);font-size:12px" /> ج.م)</h4>';
-        html += '<div class="ship-centers">';
+        html += '<div class="ship-gov-card" data-gov="' + gov + '"><h4>' + gov + ' <small style="color:var(--muted);font-weight:400">(أساسي: </small><input type="number" class="gov-base" data-gov="' + gov + '" value="' + g.base + '" style="width:70px;display:inline-block;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:6px;padding:4px 8px;color:var(--text);font-size:12px" /> ج.م)</h4><div class="ship-centers">';
         Object.keys(g.centers || {}).forEach(function(center) {
-          html += '<div class="ship-center-row"><label>' + center + '</label>';
-          html += '<input type="number" data-gov="' + gov + '" data-center="' + center + '" value="' + g.centers[center] + '" /></div>';
+          html += '<div class="ship-center-row"><label>' + center + '</label><input type="number" data-gov="' + gov + '" data-center="' + center + '" value="' + g.centers[center] + '" /></div>';
         });
         html += '</div></div>';
       });
@@ -327,6 +318,39 @@
         if (shipping.governorates[gov] && shipping.governorates[gov].centers) {
           shipping.governorates[gov].centers[center] = parseInt(inp.value, 10) || 0;
         }
+      });
+    }
+
+    function renderSettings() {
+      if (!settings) settings = {};
+      var map = {
+        sStoreName: 'storeName', sStoreNameAr: 'storeNameAr', sTagline: 'tagline',
+        sHeroBadge: 'heroBadge', sHeroTitle: 'heroTitle', sHeroTitleGold: 'heroTitleGold',
+        sHeroDesc: 'heroDesc', sHeroImage: 'heroImage', sHeroButton: 'heroButton',
+        sProductsTitle: 'productsTitle', sAboutTitle: 'aboutTitle', sAboutText: 'aboutText',
+        sPhone: 'contactPhone', sWhatsapp: 'contactWhatsapp', sEmail: 'contactEmail',
+        sAddress: 'contactAddress', sFacebook: 'facebook', sInstagram: 'instagram',
+        sFooter: 'footerText'
+      };
+      Object.keys(map).forEach(function(id) {
+        var el = document.getElementById(id);
+        if (el) el.value = settings[map[id]] || '';
+      });
+    }
+
+    function collectSettingsFromUI() {
+      var map = {
+        sStoreName: 'storeName', sStoreNameAr: 'storeNameAr', sTagline: 'tagline',
+        sHeroBadge: 'heroBadge', sHeroTitle: 'heroTitle', sHeroTitleGold: 'heroTitleGold',
+        sHeroDesc: 'heroDesc', sHeroImage: 'heroImage', sHeroButton: 'heroButton',
+        sProductsTitle: 'productsTitle', sAboutTitle: 'aboutTitle', sAboutText: 'aboutText',
+        sPhone: 'contactPhone', sWhatsapp: 'contactWhatsapp', sEmail: 'contactEmail',
+        sAddress: 'contactAddress', sFacebook: 'facebook', sInstagram: 'instagram',
+        sFooter: 'footerText'
+      };
+      Object.keys(map).forEach(function(id) {
+        var el = document.getElementById(id);
+        if (el) settings[map[id]] = el.value.trim();
       });
     }
 
@@ -372,7 +396,6 @@
       bindUI();
     }
 
-    // تسجيل دخول بكلمة مرور (من غير ما تظهر في الصفحة)
     if (sessionStorage.getItem('athar_admin') === '1') {
       adminPassword = sessionStorage.getItem('athar_admin_pass') || ADMIN_PASS;
       var loginEl = document.getElementById('loginScreen');
