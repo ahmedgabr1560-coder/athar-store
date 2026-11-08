@@ -16,7 +16,8 @@ module.exports = async function handler(req, res) {
       products: 'data/products.json',
       coupons: 'data/coupons.json',
       shipping: 'data/shipping.json',
-      orders: 'data/orders.json'
+      orders: 'data/orders.json',
+      settings: 'data/settings.json'
     };
 
     if (!password || password !== ADMIN_PASS) {
