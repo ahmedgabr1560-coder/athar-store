@@ -14,55 +14,67 @@
     .login-box .logo { font-family:'Playfair Display',serif; font-size:28px; color:var(--gold); letter-spacing:4px; margin-bottom:8px; }
     .login-box h2 { font-size:1.2rem; margin-bottom:24px; }
     .login-box input { width:100%; background:rgba(255,255,255,0.05); border:1px solid var(--border); border-radius:10px; padding:14px 16px; color:var(--text); font-family:inherit; font-size:15px; margin-bottom:16px; outline:none; }
-    .login-box input:focus { border-color:var(--gold); }
-    .btn { display:inline-flex; align-items:center; justify-content:center; padding:12px 24px; border-radius:10px; font-family:inherit; font-size:15px; font-weight:600; border:none; cursor:pointer; transition:0.2s; }
+    .btn { display:inline-flex; align-items:center; justify-content:center; padding:12px 24px; border-radius:10px; font-family:inherit; font-size:15px; font-weight:600; border:none; cursor:pointer; }
     .btn-gold { background:var(--gold); color:#111; }
-    .btn-gold:hover { background:#d4b896; }
     .btn-outline { background:transparent; border:1px solid var(--border); color:var(--text); }
-    .btn-outline:hover { border-color:var(--gold); color:var(--gold); }
     .btn-danger { background:rgba(231,76,60,0.15); color:var(--danger); }
-    .btn-danger:hover { background:var(--danger); color:#fff; }
     .btn-sm { padding:8px 14px; font-size:13px; }
-    .btn:disabled { opacity:0.5; cursor:not-allowed; }
+    .btn:disabled { opacity:0.5; }
     .dashboard { display:none; }
     .dashboard.active { display:block; }
-    .topbar { background:var(--card); border-bottom:1px solid var(--border); padding:16px 24px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:100; }
-    .topbar .logo { font-family:'Playfair Display',serif; font-size:20px; color:var(--gold); letter-spacing:3px; }
-    .topbar-actions { display:flex; gap:12px; flex-wrap:wrap; }
-    .container { max-width:1100px; margin:0 auto; padding:24px 20px; }
-    .note { background:rgba(201,168,108,0.1); border:1px solid rgba(201,168,108,0.25); border-radius:10px; padding:12px 16px; font-size:13px; color:var(--muted); margin-bottom:20px; line-height:1.7; }
+    .topbar { background:var(--card); border-bottom:1px solid var(--border); padding:14px 20px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:100; gap:12px; flex-wrap:wrap; }
+    .topbar .logo { font-family:'Playfair Display',serif; font-size:18px; color:var(--gold); letter-spacing:3px; }
+    .topbar-actions { display:flex; gap:8px; flex-wrap:wrap; }
+    .tabs { display:flex; gap:4px; padding:16px 16px 0; max-width:1200px; margin:0 auto; overflow-x:auto; }
+    .tab-btn { padding:10px 16px; border-radius:10px 10px 0 0; background:transparent; border:1px solid transparent; border-bottom:none; color:var(--muted); font-family:inherit; font-size:13px; font-weight:600; cursor:pointer; white-space:nowrap; }
+    .tab-btn.active { background:var(--card); color:var(--gold); border-color:var(--border); }
+    .container { max-width:1200px; margin:0 auto; padding:20px 16px; }
+    .tab-content { display:none; }
+    .tab-content.active { display:block; }
+    .note { background:rgba(201,168,108,0.1); border:1px solid rgba(201,168,108,0.25); border-radius:10px; padding:12px 16px; font-size:12px; color:var(--muted); margin-bottom:18px; line-height:1.7; }
     .note strong { color:var(--gold); }
-    .stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:16px; margin-bottom:28px; }
-    .stat-card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:18px; }
-    .stat-card .label { font-size:12px; color:var(--muted); margin-bottom:4px; }
-    .stat-card .value { font-size:1.5rem; font-weight:700; color:var(--gold); }
-    .section-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; flex-wrap:wrap; gap:12px; }
-    .section-header h2 { font-size:1.2rem; font-weight:700; }
-    .form-card { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:24px; margin-bottom:28px; display:none; }
+    .stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:12px; margin-bottom:22px; }
+    .stat-card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:16px; }
+    .stat-card .label { font-size:11px; color:var(--muted); margin-bottom:4px; }
+    .stat-card .value { font-size:1.4rem; font-weight:700; color:var(--gold); }
+    .section-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; flex-wrap:wrap; gap:10px; }
+    .section-header h2 { font-size:1.15rem; font-weight:700; }
+    .form-card { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:20px; margin-bottom:22px; display:none; }
     .form-card.open { display:block; }
-    .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+    .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
     @media(max-width:600px){ .form-grid { grid-template-columns:1fr; } }
-    .form-group { margin-bottom:14px; }
+    .form-group { margin-bottom:12px; }
     .form-group.full { grid-column:1/-1; }
-    .form-group label { display:block; font-size:12px; color:var(--muted); margin-bottom:6px; }
-    .form-group input { width:100%; background:rgba(255,255,255,0.05); border:1px solid var(--border); border-radius:8px; padding:11px 14px; color:var(--text); font-family:inherit; font-size:14px; outline:none; }
-    .form-group input:focus { border-color:var(--gold); }
-    .form-actions { display:flex; gap:12px; margin-top:8px; flex-wrap:wrap; }
+    .form-group label { display:block; font-size:11px; color:var(--muted); margin-bottom:5px; }
+    .form-group input, .form-group select { width:100%; background:rgba(255,255,255,0.05); border:1px solid var(--border); border-radius:8px; padding:10px 12px; color:var(--text); font-family:inherit; font-size:13px; outline:none; }
+    .form-actions { display:flex; gap:10px; margin-top:8px; flex-wrap:wrap; }
     .table-wrap { background:var(--card); border:1px solid var(--border); border-radius:14px; overflow-x:auto; }
-    table { width:100%; border-collapse:collapse; min-width:600px; }
-    th,td { padding:12px 14px; text-align:right; border-bottom:1px solid var(--border); font-size:13px; }
+    table { width:100%; border-collapse:collapse; min-width:560px; }
+    th,td { padding:11px 12px; text-align:right; border-bottom:1px solid var(--border); font-size:12px; }
     th { background:rgba(255,255,255,0.03); color:var(--muted); font-weight:600; font-size:11px; }
-    tr:last-child td { border-bottom:none; }
-    .product-thumb { width:44px; height:52px; border-radius:6px; object-fit:cover; background:#333; }
-    .badge { display:inline-block; padding:3px 10px; border-radius:20px; font-size:11px; font-weight:600; background:rgba(201,168,108,0.2); color:var(--gold); }
+    .product-thumb { width:40px; height:48px; border-radius:6px; object-fit:cover; background:#333; }
+    .badge { display:inline-block; padding:3px 9px; border-radius:20px; font-size:11px; font-weight:600; }
+    .badge-gold { background:rgba(201,168,108,0.2); color:var(--gold); }
+    .badge-pending { background:rgba(234,179,8,0.15); color:#ca8a04; }
+    .badge-confirmed { background:rgba(59,130,246,0.15); color:#2563eb; }
+    .badge-shipping { background:rgba(168,85,247,0.15); color:#7c3aed; }
+    .badge-delivered { background:rgba(34,197,94,0.15); color:#16a34a; }
+    .badge-cancelled { background:rgba(239,68,68,0.15); color:#dc2626; }
+    .badge-on { background:rgba(34,197,94,0.15); color:#16a34a; }
+    .badge-off { background:rgba(239,68,68,0.15); color:#dc2626; }
     .actions-cell { display:flex; gap:6px; flex-wrap:wrap; }
-    .empty-state { text-align:center; padding:40px 20px; color:var(--muted); }
-    .toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(80px); background:var(--success); color:#fff; padding:12px 24px; border-radius:10px; font-weight:600; font-size:14px; opacity:0; transition:0.3s; z-index:999; max-width:90%; text-align:center; }
+    .empty-state { text-align:center; padding:36px 20px; color:var(--muted); }
+    .toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(80px); background:var(--success); color:#fff; padding:12px 24px; border-radius:10px; font-weight:600; font-size:13px; opacity:0; transition:0.3s; z-index:999; max-width:90%; text-align:center; }
     .toast.show { transform:translateX(-50%) translateY(0); opacity:1; }
     .toast.error { background:var(--danger); }
-    .status-line { font-size:12px; color:var(--muted); margin-top:8px; }
-    .status-line.ok { color:var(--success); }
-    .status-line.err { color:var(--danger); }
+    .status-select { background:rgba(255,255,255,0.05); border:1px solid var(--border); border-radius:6px; padding:5px 8px; color:var(--text); font-family:inherit; font-size:11px; }
+    .order-detail { font-size:11px; color:var(--muted); max-width:200px; }
+    .ship-gov-card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:16px; margin-bottom:12px; }
+    .ship-gov-card h4 { font-size:14px; margin-bottom:10px; color:var(--gold); }
+    .ship-centers { display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:8px; }
+    .ship-center-row { display:flex; gap:6px; align-items:center; }
+    .ship-center-row input { flex:1; background:rgba(255,255,255,0.05); border:1px solid var(--border); border-radius:6px; padding:6px 8px; color:var(--text); font-family:inherit; font-size:12px; }
+    .ship-center-row label { font-size:11px; color:var(--muted); min-width:70px; }
   </style>
 </head>
 <body>
@@ -75,275 +87,92 @@
       <p style="margin-top:16px;font-size:12px;color:var(--muted)">كلمة المرور: <strong style="color:var(--gold)">athar2026</strong></p>
     </div>
   </div>
-
   <div class="dashboard" id="dashboard">
     <div class="topbar">
       <div class="logo">ATHAR Admin</div>
       <div class="topbar-actions">
         <button type="button" class="btn btn-gold btn-sm" id="publishBtn">نشر على GitHub</button>
-        <a href="index.html" class="btn btn-outline btn-sm" target="_blank">عرض المتجر</a>
+        <a href="index.html" class="btn btn-outline btn-sm" target="_blank">المتجر</a>
         <button type="button" class="btn btn-outline btn-sm" id="logoutBtn">خروج</button>
       </div>
     </div>
-
+    <div class="tabs">
+      <button type="button" class="tab-btn active" data-tab="products">المنتجات</button>
+      <button type="button" class="tab-btn" data-tab="orders">الطلبات</button>
+      <button type="button" class="tab-btn" data-tab="coupons">أكواد الخصم</button>
+      <button type="button" class="tab-btn" data-tab="shipping">الشحن</button>
+    </div>
     <div class="container">
-      <div class="note">
-        <strong>مهم:</strong> التعديلات تُحفظ محلياً أولاً. اضغط <strong>نشر على GitHub</strong> عشان تظهر لكل الزوار على Vercel.
-        <div class="status-line" id="apiStatus">جاري التحقق من الاتصال...</div>
-      </div>
-
-      <div class="stats">
-        <div class="stat-card"><div class="label">عدد المنتجات</div><div class="value" id="statCount">0</div></div>
-        <div class="stat-card"><div class="label">عليها خصم</div><div class="value" id="statDiscount">0</div></div>
-      </div>
-
-      <div class="section-header">
-        <h2>المنتجات</h2>
-        <button type="button" class="btn btn-gold btn-sm" id="addProductBtn">+ إضافة منتج</button>
-      </div>
-
-      <div class="form-card" id="productForm">
-        <h3 id="formTitle" style="margin-bottom:16px;font-size:1rem">إضافة منتج جديد</h3>
-        <input type="hidden" id="editId" />
-        <div class="form-grid">
-          <div class="form-group"><label>اسم المنتج *</label><input type="text" id="pName" placeholder="قميص كتان أسود" /></div>
-          <div class="form-group"><label>السعر (ج.م) *</label><input type="number" id="pPrice" placeholder="399" min="0" /></div>
-          <div class="form-group"><label>السعر القديم</label><input type="number" id="pOldPrice" placeholder="499" min="0" /></div>
-          <div class="form-group"><label>الخصم %</label><input type="number" id="pDiscount" placeholder="20" min="0" max="99" /></div>
-          <div class="form-group full"><label>رابط الصورة *</label><input type="url" id="pImage" placeholder="https://..." /></div>
+      <div class="note"><strong>مهم:</strong> عدّل ثم اضغط <strong>نشر على GitHub</strong> لحفظ التغييرات للجميع.</div>
+      <div class="tab-content active" id="tab-products">
+        <div class="stats">
+          <div class="stat-card"><div class="label">المنتجات</div><div class="value" id="statProducts">0</div></div>
+          <div class="stat-card"><div class="label">عليها خصم</div><div class="value" id="statProdDisc">0</div></div>
         </div>
-        <div class="form-actions">
-          <button type="button" class="btn btn-gold btn-sm" id="saveProductBtn">حفظ</button>
-          <button type="button" class="btn btn-outline btn-sm" id="cancelFormBtn">إلغاء</button>
+        <div class="section-header"><h2>المنتجات</h2><button type="button" class="btn btn-gold btn-sm" id="addProductBtn">+ إضافة</button></div>
+        <div class="form-card" id="productForm">
+          <h3 id="formTitle" style="margin-bottom:12px;font-size:0.95rem">إضافة منتج</h3>
+          <input type="hidden" id="editId" />
+          <div class="form-grid">
+            <div class="form-group"><label>الاسم *</label><input type="text" id="pName" /></div>
+            <div class="form-group"><label>السعر *</label><input type="number" id="pPrice" min="0" /></div>
+            <div class="form-group"><label>السعر القديم</label><input type="number" id="pOldPrice" min="0" /></div>
+            <div class="form-group"><label>الخصم %</label><input type="number" id="pDiscount" min="0" max="99" /></div>
+            <div class="form-group full"><label>رابط الصورة *</label><input type="url" id="pImage" /></div>
+          </div>
+          <div class="form-actions">
+            <button type="button" class="btn btn-gold btn-sm" id="saveProductBtn">حفظ</button>
+            <button type="button" class="btn btn-outline btn-sm" id="cancelProductBtn">إلغاء</button>
+          </div>
         </div>
+        <div class="table-wrap"><table><thead><tr><th>صورة</th><th>الاسم</th><th>السعر</th><th>خصم</th><th>إجراءات</th></tr></thead><tbody id="productsBody"></tbody></table>
+        <div class="empty-state" id="emptyProducts" style="display:none">لا توجد منتجات</div></div>
       </div>
-
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>الصورة</th><th>الاسم</th><th>السعر</th><th>الخصم</th><th>إجراءات</th></tr></thead>
-          <tbody id="productsBody"></tbody>
-        </table>
-        <div class="empty-state" id="emptyProducts" style="display:none">لا توجد منتجات</div>
+      <div class="tab-content" id="tab-orders">
+        <div class="stats">
+          <div class="stat-card"><div class="label">الكل</div><div class="value" id="statOrders">0</div></div>
+          <div class="stat-card"><div class="label">قيد المراجعة</div><div class="value" id="statPending">0</div></div>
+          <div class="stat-card"><div class="label">شحن</div><div class="value" id="statShipping">0</div></div>
+          <div class="stat-card"><div class="label">تم التسليم</div><div class="value" id="statDelivered">0</div></div>
+        </div>
+        <div class="section-header"><h2>الطلبات</h2><button type="button" class="btn btn-outline btn-sm" id="refreshOrdersBtn">تحديث</button></div>
+        <div class="table-wrap"><table><thead><tr><th>رقم</th><th>العميل</th><th>المنتجات</th><th>الإجمالي</th><th>الحالة</th><th>تغيير</th></tr></thead><tbody id="ordersBody"></tbody></table>
+        <div class="empty-state" id="emptyOrders" style="display:none">لا توجد طلبات</div></div>
+      </div>
+      <div class="tab-content" id="tab-coupons">
+        <div class="stats">
+          <div class="stat-card"><div class="label">الأكواد</div><div class="value" id="statCoupons">0</div></div>
+          <div class="stat-card"><div class="label">مفعّلة</div><div class="value" id="statCouponsActive">0</div></div>
+        </div>
+        <div class="section-header"><h2>أكواد الخصم</h2><button type="button" class="btn btn-gold btn-sm" id="addCouponBtn">+ إضافة كود</button></div>
+        <div class="form-card" id="couponForm">
+          <input type="hidden" id="couponEditIdx" value="-1" />
+          <div class="form-grid">
+            <div class="form-group"><label>الكود *</label><input type="text" id="cCode" style="text-transform:uppercase" /></div>
+            <div class="form-group"><label>النوع *</label><select id="cType"><option value="percent">نسبة %</option><option value="fixed">مبلغ ثابت</option><option value="shipping">شحن مجاني</option></select></div>
+            <div class="form-group"><label>القيمة</label><input type="number" id="cValue" min="0" /></div>
+            <div class="form-group"><label>الوصف</label><input type="text" id="cLabel" /></div>
+          </div>
+          <div class="form-actions">
+            <button type="button" class="btn btn-gold btn-sm" id="saveCouponBtn">حفظ</button>
+            <button type="button" class="btn btn-outline btn-sm" id="cancelCouponBtn">إلغاء</button>
+          </div>
+        </div>
+        <div class="table-wrap"><table><thead><tr><th>الكود</th><th>النوع</th><th>القيمة</th><th>الوصف</th><th>الحالة</th><th>إجراءات</th></tr></thead><tbody id="couponsBody"></tbody></table>
+        <div class="empty-state" id="emptyCoupons" style="display:none">لا توجد أكواد</div></div>
+      </div>
+      <div class="tab-content" id="tab-shipping">
+        <div class="section-header"><h2>أسعار الشحن</h2></div>
+        <div class="form-group" style="max-width:280px;margin-bottom:20px">
+          <label style="font-size:12px;color:var(--muted)">حد الشحن المجاني (ج.م)</label>
+          <input type="number" id="freeShipMin" min="0" style="width:100%;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-family:inherit;font-size:14px" />
+        </div>
+        <div id="shippingList"></div>
+        <p style="font-size:12px;color:var(--muted);margin-top:12px">عدّل الأسعار ثم اضغط «نشر على GitHub»</p>
       </div>
     </div>
   </div>
-
   <div class="toast" id="toast"></div>
-
-  <script>
-  (function() {
-    var ADMIN_PASS = 'athar2026';
-    var PRODUCTS_URL = 'data/products.json';
-    var API_URL = '/api/update-products';
-    var products = [];
-    var adminPassword = '';
-
-    function showToast(msg, isError) {
-      var t = document.getElementById('toast');
-      t.textContent = msg;
-      t.className = 'toast show' + (isError ? ' error' : '');
-      setTimeout(function() { t.classList.remove('show'); }, 3500);
-    }
-
-    function showDashboard() {
-      document.getElementById('loginScreen').style.display = 'none';
-      document.getElementById('dashboard').classList.add('active');
-      loadProducts();
-      checkApi();
-    }
-
-    function login() {
-      var input = document.getElementById('adminPassword');
-      var pass = input ? String(input.value).trim() : '';
-      if (pass === ADMIN_PASS) {
-        adminPassword = pass;
-        sessionStorage.setItem('athar_admin', '1');
-        sessionStorage.setItem('athar_admin_pass', pass);
-        showDashboard();
-      } else {
-        showToast('كلمة المرور غير صحيحة', true);
-      }
-    }
-
-    function logout() {
-      sessionStorage.removeItem('athar_admin');
-      sessionStorage.removeItem('athar_admin_pass');
-      adminPassword = '';
-      document.getElementById('dashboard').classList.remove('active');
-      document.getElementById('loginScreen').style.display = 'flex';
-    }
-
-    async function loadProducts() {
-      try {
-        var res = await fetch(PRODUCTS_URL + '?t=' + Date.now());
-        if (res.ok) {
-          var data = await res.json();
-          products = Array.isArray(data) ? data : [];
-        }
-      } catch (e) { products = []; }
-      try {
-        var draft = JSON.parse(localStorage.getItem('athar_products_draft') || 'null');
-        if (Array.isArray(draft) && draft.length) products = draft;
-      } catch (e) {}
-      renderProducts();
-    }
-
-    function saveDraft() {
-      localStorage.setItem('athar_products_draft', JSON.stringify(products));
-    }
-
-    function renderProducts() {
-      document.getElementById('statCount').textContent = products.length;
-      document.getElementById('statDiscount').textContent = products.filter(function(p){ return p.discount; }).length;
-      var tbody = document.getElementById('productsBody');
-      var empty = document.getElementById('emptyProducts');
-      if (!products.length) { tbody.innerHTML = ''; empty.style.display = 'block'; return; }
-      empty.style.display = 'none';
-      var html = '';
-      for (var i = 0; i < products.length; i++) {
-        var p = products[i];
-        html += '<tr>';
-        html += '<td><img class="product-thumb" src="' + (p.image||'') + '" alt="" /></td>';
-        html += '<td style="font-weight:600">' + (p.name||'') + '</td>';
-        html += '<td>' + p.price + ' ج.م' + (p.oldPrice ? '<br><small style="color:var(--muted);text-decoration:line-through">' + p.oldPrice + '</small>' : '') + '</td>';
-        html += '<td>' + (p.discount ? '<span class="badge">' + p.discount + '%</span>' : '—') + '</td>';
-        html += '<td><div class="actions-cell">';
-        html += '<button type="button" class="btn btn-outline btn-sm" data-edit="' + i + '">تعديل</button>';
-        html += '<button type="button" class="btn btn-danger btn-sm" data-del="' + i + '">حذف</button>';
-        html += '</div></td></tr>';
-      }
-      tbody.innerHTML = html;
-      tbody.querySelectorAll('[data-edit]').forEach(function(btn) {
-        btn.addEventListener('click', function() {
-          openForm(products[parseInt(btn.getAttribute('data-edit'), 10)]);
-        });
-      });
-      tbody.querySelectorAll('[data-del]').forEach(function(btn) {
-        btn.addEventListener('click', function() {
-          var idx = parseInt(btn.getAttribute('data-del'), 10);
-          if (!confirm('حذف هذا المنتج؟')) return;
-          products.splice(idx, 1);
-          saveDraft();
-          renderProducts();
-          showToast('تم الحذف محلياً — اضغط نشر لحفظه على GitHub');
-        });
-      });
-    }
-
-    function openForm(editProduct) {
-      var form = document.getElementById('productForm');
-      form.classList.add('open');
-      document.getElementById('formTitle').textContent = editProduct ? 'تعديل المنتج' : 'إضافة منتج جديد';
-      if (editProduct) {
-        document.getElementById('editId').value = editProduct.id;
-        document.getElementById('pName').value = editProduct.name || '';
-        document.getElementById('pPrice').value = editProduct.price || '';
-        document.getElementById('pOldPrice').value = editProduct.oldPrice || '';
-        document.getElementById('pDiscount').value = editProduct.discount || '';
-        document.getElementById('pImage').value = editProduct.image || '';
-      } else {
-        document.getElementById('editId').value = '';
-        document.getElementById('pName').value = '';
-        document.getElementById('pPrice').value = '';
-        document.getElementById('pOldPrice').value = '';
-        document.getElementById('pDiscount').value = '';
-        document.getElementById('pImage').value = '';
-      }
-      form.scrollIntoView({ behavior: 'smooth' });
-    }
-
-    function closeForm() {
-      document.getElementById('productForm').classList.remove('open');
-    }
-
-    function saveProduct() {
-      var name = document.getElementById('pName').value.trim();
-      var price = parseInt(document.getElementById('pPrice').value, 10);
-      var oldPrice = parseInt(document.getElementById('pOldPrice').value, 10) || null;
-      var discount = parseInt(document.getElementById('pDiscount').value, 10) || null;
-      var image = document.getElementById('pImage').value.trim();
-      var editId = document.getElementById('editId').value;
-      if (!name || !price || !image) { showToast('املأ الحقول المطلوبة', true); return; }
-      if (editId) {
-        for (var i = 0; i < products.length; i++) {
-          if (products[i].id === editId) {
-            products[i].name = name; products[i].price = price;
-            products[i].oldPrice = oldPrice; products[i].discount = discount; products[i].image = image;
-            break;
-          }
-        }
-      } else {
-        products.push({
-          id: name.replace(/\s+/g, '-') + '-' + price,
-          name: name, price: price, oldPrice: oldPrice, discount: discount, image: image,
-          images: [image], description: 'منتج رجالي فاخر من ATHAR.',
-          sizes: ['S','M','L','XL'],
-          colors: [{ name: 'أسود', hex: '#1a1a1a' }, { name: 'أبيض', hex: '#f5f5f5' }],
-          materials: ['قطن']
-        });
-      }
-      saveDraft(); closeForm(); renderProducts();
-      showToast('تم الحفظ محلياً — اضغط «نشر على GitHub»');
-    }
-
-    async function publishToGitHub() {
-      var btn = document.getElementById('publishBtn');
-      btn.disabled = true; btn.textContent = 'جاري النشر...';
-      try {
-        var res = await fetch(API_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            password: adminPassword || sessionStorage.getItem('athar_admin_pass') || ADMIN_PASS,
-            products: products
-          })
-        });
-        var data = await res.json().catch(function() { return {}; });
-        if (!res.ok) {
-          showToast(data.error || 'فشل النشر', true);
-          var st = document.getElementById('apiStatus');
-          st.textContent = data.error || 'فشل الاتصال بالـ API';
-          st.className = 'status-line err';
-        } else {
-          localStorage.removeItem('athar_products_draft');
-          showToast(data.message || 'تم النشر بنجاح');
-          var st2 = document.getElementById('apiStatus');
-          st2.textContent = 'تم النشر على GitHub ✓ — Vercel هيحدّث خلال دقيقة';
-          st2.className = 'status-line ok';
-        }
-      } catch (e) {
-        showToast('تعذر الاتصال بـ API. تأكد أن الموقع على Vercel', true);
-        document.getElementById('apiStatus').textContent = 'الـ API غير متاح — أضف GITHUB_TOKEN في Vercel';
-        document.getElementById('apiStatus').className = 'status-line err';
-      }
-      btn.disabled = false; btn.textContent = 'نشر على GitHub';
-    }
-
-    async function checkApi() {
-      var st = document.getElementById('apiStatus');
-      try {
-        await fetch(API_URL, { method: 'OPTIONS' });
-        st.textContent = 'الاتصال بالـ API جاهز — أضف GITHUB_TOKEN في Vercel إن لم تفعل';
-        st.className = 'status-line ok';
-      } catch (e) {
-        st.textContent = 'بعد الرفع على Vercel وإضافة GITHUB_TOKEN سيعمل النشر.';
-        st.className = 'status-line';
-      }
-    }
-
-    document.getElementById('loginBtn').addEventListener('click', login);
-    document.getElementById('adminPassword').addEventListener('keydown', function(e) { if (e.key === 'Enter') login(); });
-    document.getElementById('logoutBtn').addEventListener('click', logout);
-    document.getElementById('addProductBtn').addEventListener('click', function() { openForm(null); });
-    document.getElementById('saveProductBtn').addEventListener('click', saveProduct);
-    document.getElementById('cancelFormBtn').addEventListener('click', closeForm);
-    document.getElementById('publishBtn').addEventListener('click', publishToGitHub);
-
-    if (sessionStorage.getItem('athar_admin') === '1') {
-      adminPassword = sessionStorage.getItem('athar_admin_pass') || ADMIN_PASS;
-      showDashboard();
-    }
-  })();
-  </script>
+  <script src="admin-app.js"></script>
 </body>
 </html>
