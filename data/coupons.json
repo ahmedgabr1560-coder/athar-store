@@ -1,0 +1,6 @@
+[
+  { "code": "ATHAR10", "type": "percent", "value": 10, "label": "خصم 10%", "active": true },
+  { "code": "ATHAR15", "type": "percent", "value": 15, "label": "خصم 15%", "active": true },
+  { "code": "WELCOME50", "type": "fixed", "value": 50, "label": "خصم 50 ج.م", "active": true },
+  { "code": "FREE50", "type": "shipping", "value": 0, "label": "شحن مجاني", "active": true }
+]
