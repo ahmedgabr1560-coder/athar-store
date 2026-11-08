@@ -1,4 +1,4 @@
-// ATHAR Store — Cart + Dynamic Products + Site Settings + Visits
+// ATHAR Store — optimized
 
 const CART_KEY = 'athar_cart';
 const PRODUCTS_URL = 'data/products.json';
@@ -40,7 +40,7 @@ function renderProductCard(p) {
   const oldPrice = p.oldPrice ? `<span class="old">${p.oldPrice} ج.م</span>` : '';
   return `<article class="product-card">
     <div class="product-img-wrap">
-      <img src="${p.image}" alt="${p.name}" />
+      <img src="${p.image}" alt="${p.name}" loading="lazy" decoding="async" width="400" height="500" />
       ${discountBadge}
       <button class="wishlist-btn" aria-label="المفضلة">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -173,7 +173,9 @@ function trackVisit() {
 
 document.addEventListener('DOMContentLoaded', () => {
   applySiteSettings();
-  trackVisit();
+  if (window.requestIdleCallback) requestIdleCallback(function(){ trackVisit(); }, { timeout: 3000 });
+  else setTimeout(trackVisit, 1500);
+
   const themeToggle = document.getElementById('themeToggle');
   const html = document.documentElement;
   if (localStorage.getItem('athar-theme') === 'dark') html.setAttribute('data-theme', 'dark');
@@ -186,18 +188,22 @@ document.addEventListener('DOMContentLoaded', () => {
       localStorage.setItem('athar-theme', 'dark');
     }
   });
+
   const menuToggle = document.getElementById('menuToggle');
   const mobileMenu = document.getElementById('mobileMenu');
   menuToggle?.addEventListener('click', () => mobileMenu?.classList.toggle('open'));
   mobileMenu?.querySelectorAll('a').forEach(link => {
     link.addEventListener('click', () => mobileMenu.classList.remove('open'));
   });
+
   const header = document.getElementById('header');
   window.addEventListener('scroll', () => {
     header?.classList.toggle('scrolled', window.scrollY > 40);
-  });
+  }, { passive: true });
+
   updateCartCount();
   renderDynamicProducts().then(() => bindProductButtons());
+
   document.querySelectorAll('.cart-btn').forEach(btn => {
     if (btn.tagName === 'BUTTON') {
       btn.addEventListener('click', () => { window.location.href = 'cart.html'; });
