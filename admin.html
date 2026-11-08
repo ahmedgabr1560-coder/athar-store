@@ -14,24 +14,20 @@
     .login-box .logo { font-family:'Playfair Display',serif; font-size:28px; color:var(--gold); letter-spacing:4px; margin-bottom:8px; }
     .login-box h2 { font-size:1.2rem; margin-bottom:24px; }
     .login-box input { width:100%; background:rgba(255,255,255,0.05); border:1px solid var(--border); border-radius:10px; padding:14px 16px; color:var(--text); font-family:inherit; font-size:15px; margin-bottom:16px; outline:none; }
-    .login-box input:focus { border-color:var(--gold); }
-    .btn { display:inline-flex; align-items:center; justify-content:center; padding:12px 24px; border-radius:10px; font-family:inherit; font-size:15px; font-weight:600; border:none; cursor:pointer; transition:0.2s; }
+    .btn { display:inline-flex; align-items:center; justify-content:center; padding:12px 24px; border-radius:10px; font-family:inherit; font-size:15px; font-weight:600; border:none; cursor:pointer; }
     .btn-gold { background:var(--gold); color:#111; }
-    .btn-gold:hover { background:#d4b896; }
     .btn-outline { background:transparent; border:1px solid var(--border); color:var(--text); }
-    .btn-outline:hover { border-color:var(--gold); color:var(--gold); }
     .btn-danger { background:rgba(231,76,60,0.15); color:var(--danger); }
-    .btn-danger:hover { background:var(--danger); color:#fff; }
     .btn-sm { padding:8px 14px; font-size:13px; }
-    .btn:disabled { opacity:0.5; cursor:not-allowed; }
+    .btn:disabled { opacity:0.5; }
     .dashboard { display:none; }
     .dashboard.active { display:block; }
     .topbar { background:var(--card); border-bottom:1px solid var(--border); padding:14px 20px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:100; gap:12px; flex-wrap:wrap; }
     .topbar .logo { font-family:'Playfair Display',serif; font-size:18px; color:var(--gold); letter-spacing:3px; }
     .topbar-actions { display:flex; gap:8px; flex-wrap:wrap; }
     .tabs { display:flex; gap:4px; padding:16px 16px 0; max-width:1200px; margin:0 auto; overflow-x:auto; }
-    .tab-btn { padding:10px 16px; border-radius:10px 10px 0 0; background:transparent; border:1px solid transparent; border-bottom:none; color:var(--muted); font-family:inherit; font-size:13px; font-weight:600; cursor:pointer; white-space:nowrap; }
-    .tab-btn.active { background:var(--card); color:var(--gold); border-color:var(--border); }
+    .tab-btn { padding:10px 16px; border-radius:10px 10px 0 0; background:transparent; border:1px solid transparent; color:var(--muted); font-family:inherit; font-size:13px; font-weight:600; cursor:pointer; white-space:nowrap; }
+    .tab-btn.active { background:var(--card); color:var(--gold); border-color:var(--border); border-bottom:none; }
     .container { max-width:1200px; margin:0 auto; padding:20px 16px; }
     .tab-content { display:none; }
     .tab-content.active { display:block; }
@@ -39,12 +35,12 @@
     .note strong { color:var(--gold); }
     .stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:12px; margin-bottom:22px; }
     .stat-card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:16px; }
-    .stat-card .label { font-size:11px; color:var(--muted); margin-bottom:4px; }
+    .stat-card .label { font-size:11px; color:var(--muted); }
     .stat-card .value { font-size:1.4rem; font-weight:700; color:var(--gold); }
     .section-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; flex-wrap:wrap; gap:10px; }
     .section-header h2 { font-size:1.15rem; font-weight:700; }
     .form-card { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:20px; margin-bottom:22px; display:none; }
-    .form-card.open { display:block; }
+    .form-card.open, .form-card.always { display:block; }
     .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
     @media(max-width:600px){ .form-grid { grid-template-columns:1fr; } }
     .form-group { margin-bottom:12px; }
@@ -90,7 +86,6 @@
       <button type="button" class="btn btn-gold" id="loginBtn" style="width:100%">دخول</button>
     </div>
   </div>
-
   <div class="dashboard" id="dashboard">
     <div class="topbar">
       <div class="logo">ATHAR Admin</div>
@@ -105,9 +100,11 @@
       <button type="button" class="tab-btn" data-tab="orders">الطلبات</button>
       <button type="button" class="tab-btn" data-tab="coupons">أكواد الخصم</button>
       <button type="button" class="tab-btn" data-tab="shipping">الشحن</button>
+      <button type="button" class="tab-btn" data-tab="settings">إعدادات الموقع</button>
     </div>
     <div class="container">
-      <div class="note"><strong>مهم:</strong> عدّل ثم اضغط <strong>نشر على GitHub</strong> لحفظ التغييرات للجميع.</div>
+      <div class="note"><strong>مهم:</strong> عدّل ثم اضغط <strong>نشر على GitHub</strong> لحفظ التغييرات على الموقع كله.</div>
+
       <div class="tab-content active" id="tab-products">
         <div class="stats">
           <div class="stat-card"><div class="label">المنتجات</div><div class="value" id="statProducts">0</div></div>
@@ -132,6 +129,7 @@
         <div class="table-wrap"><table><thead><tr><th>صورة</th><th>الاسم</th><th>السعر</th><th>خصم</th><th>إجراءات</th></tr></thead><tbody id="productsBody"></tbody></table>
         <div class="empty-state" id="emptyProducts" style="display:none">لا توجد منتجات</div></div>
       </div>
+
       <div class="tab-content" id="tab-orders">
         <div class="stats">
           <div class="stat-card"><div class="label">الكل</div><div class="value" id="statOrders">0</div></div>
@@ -143,6 +141,7 @@
         <div class="table-wrap"><table><thead><tr><th>رقم</th><th>العميل</th><th>المنتجات</th><th>الإجمالي</th><th>الحالة</th><th>تغيير</th></tr></thead><tbody id="ordersBody"></tbody></table>
         <div class="empty-state" id="emptyOrders" style="display:none">لا توجد طلبات</div></div>
       </div>
+
       <div class="tab-content" id="tab-coupons">
         <div class="stats">
           <div class="stat-card"><div class="label">الأكواد</div><div class="value" id="statCoupons">0</div></div>
@@ -165,6 +164,7 @@
         <div class="table-wrap"><table><thead><tr><th>الكود</th><th>النوع</th><th>القيمة</th><th>الوصف</th><th>الحالة</th><th>إجراءات</th></tr></thead><tbody id="couponsBody"></tbody></table>
         <div class="empty-state" id="emptyCoupons" style="display:none">لا توجد أكواد</div></div>
       </div>
+
       <div class="tab-content" id="tab-shipping">
         <div class="section-header"><h2>أسعار الشحن</h2></div>
         <div class="form-group" style="max-width:280px;margin-bottom:20px">
@@ -173,6 +173,34 @@
         </div>
         <div id="shippingList"></div>
         <p style="font-size:12px;color:var(--muted);margin-top:12px">عدّل الأسعار ثم اضغط «نشر على GitHub»</p>
+      </div>
+
+      <div class="tab-content" id="tab-settings">
+        <div class="section-header"><h2>إعدادات الموقع</h2></div>
+        <div class="note">من هنا بتتحكم في اسم المتجر، الهيرو، النصوص، التليفون، والفوتر — وبعدين تنشر.</div>
+        <div class="form-card always">
+          <div class="form-grid">
+            <div class="form-group"><label>اسم المتجر (EN)</label><input type="text" id="sStoreName" /></div>
+            <div class="form-group"><label>اسم المتجر (عربي)</label><input type="text" id="sStoreNameAr" /></div>
+            <div class="form-group"><label>الشعار الفرعي</label><input type="text" id="sTagline" /></div>
+            <div class="form-group"><label>شارة الهيرو</label><input type="text" id="sHeroBadge" /></div>
+            <div class="form-group full"><label>عنوان الهيرو</label><input type="text" id="sHeroTitle" /></div>
+            <div class="form-group full"><label>عنوان الهيرو (ذهبي)</label><input type="text" id="sHeroTitleGold" /></div>
+            <div class="form-group full"><label>وصف الهيرو</label><input type="text" id="sHeroDesc" /></div>
+            <div class="form-group full"><label>صورة الهيرو (رابط)</label><input type="url" id="sHeroImage" /></div>
+            <div class="form-group"><label>نص زر التسوق</label><input type="text" id="sHeroButton" /></div>
+            <div class="form-group"><label>عنوان قسم المنتجات</label><input type="text" id="sProductsTitle" /></div>
+            <div class="form-group"><label>عنوان من نحن</label><input type="text" id="sAboutTitle" /></div>
+            <div class="form-group full"><label>نص من نحن</label><input type="text" id="sAboutText" /></div>
+            <div class="form-group"><label>رقم الهاتف</label><input type="text" id="sPhone" /></div>
+            <div class="form-group"><label>واتساب</label><input type="text" id="sWhatsapp" placeholder="2010xxxxxxxx" /></div>
+            <div class="form-group"><label>الإيميل</label><input type="email" id="sEmail" /></div>
+            <div class="form-group"><label>العنوان</label><input type="text" id="sAddress" /></div>
+            <div class="form-group"><label>فيسبوك</label><input type="url" id="sFacebook" /></div>
+            <div class="form-group"><label>إنستجرام</label><input type="url" id="sInstagram" /></div>
+            <div class="form-group full"><label>نص الفوتر</label><input type="text" id="sFooter" /></div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
