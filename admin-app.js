@@ -367,22 +367,18 @@
     }
 
     if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', function() {
-        bindUI();
-        if (sessionStorage.getItem('athar_admin') === '1') {
-          adminPassword = sessionStorage.getItem('athar_admin_pass') || ADMIN_PASS;
-          document.getElementById('loginScreen').style.display = 'none';
-          document.getElementById('dashboard').classList.add('active');
-          loadAll();
-        }
-      });
+      document.addEventListener('DOMContentLoaded', bindUI);
     } else {
       bindUI();
-      if (sessionStorage.getItem('athar_admin') === '1') {
-        adminPassword = sessionStorage.getItem('athar_admin_pass') || ADMIN_PASS;
-        document.getElementById('loginScreen').style.display = 'none';
-        document.getElementById('dashboard').classList.add('active');
-        loadAll();
-      }
+    }
+
+    // تسجيل دخول بكلمة مرور (من غير ما تظهر في الصفحة)
+    if (sessionStorage.getItem('athar_admin') === '1') {
+      adminPassword = sessionStorage.getItem('athar_admin_pass') || ADMIN_PASS;
+      var loginEl = document.getElementById('loginScreen');
+      if (loginEl) loginEl.style.display = 'none';
+      var dash = document.getElementById('dashboard');
+      if (dash) dash.classList.add('active');
+      loadAll();
     }
   })();
