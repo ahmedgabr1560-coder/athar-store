@@ -6,7 +6,6 @@ module.exports = async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   try {
-    // ===== Visitor tracking (no password) =====
     if (req.body && req.body.action === 'visit') {
       const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
       const REPO_OWNER = process.env.REPO_OWNER || 'ahmedgabr1560-coder';
@@ -49,9 +48,7 @@ module.exports = async function handler(req, res) {
         headers: { ...headers, 'Content-Type': 'application/json' },
         body: JSON.stringify(putBody)
       });
-      if (!putRes.ok) {
-        return res.status(200).json({ success: false });
-      }
+      if (!putRes.ok) return res.status(200).json({ success: false });
       return res.status(200).json({ success: true, total: data.total, today: data.today });
     }
 
