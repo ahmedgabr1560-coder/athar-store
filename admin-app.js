@@ -10,6 +10,7 @@
 
     function showToast(msg, isError) {
       var t = document.getElementById('toast');
+      if (!t) { alert(msg); return; }
       t.textContent = msg;
       t.className = 'toast show' + (isError ? ' error' : '');
       setTimeout(function() { t.classList.remove('show'); }, 3500);
@@ -53,7 +54,7 @@
         var r = await fetch(url + '?t=' + Date.now());
         if (!r.ok) return null;
         return await r.json();
-      } catch { return null; }
+      } catch (e) { return null; }
     }
 
     async function loadAll() {
@@ -82,8 +83,7 @@
 
     async function publish(file, data) {
       var btn = document.getElementById('publishBtn');
-      btn.disabled = true;
-      btn.textContent = 'جاري النشر...';
+      if (btn) { btn.disabled = true; btn.textContent = 'جاري النشر...'; }
       try {
         var res = await fetch(API, {
           method: 'POST',
@@ -100,8 +100,7 @@
       } catch (e) {
         showToast('تعذر الاتصال — تأكد من Vercel و GITHUB_TOKEN', true);
       }
-      btn.disabled = false;
-      btn.textContent = 'نشر على GitHub';
+      if (btn) { btn.disabled = false; btn.textContent = 'نشر على GitHub'; }
     }
 
     function publishCurrent() {
@@ -114,12 +113,15 @@
     }
 
     function renderProducts() {
-      document.getElementById('statProducts').textContent = products.length;
-      document.getElementById('statProdDisc').textContent = products.filter(function(p){ return p.discount; }).length;
+      var el1 = document.getElementById('statProducts');
+      var el2 = document.getElementById('statProdDisc');
+      if (el1) el1.textContent = products.length;
+      if (el2) el2.textContent = products.filter(function(p){ return p.discount; }).length;
       var tbody = document.getElementById('productsBody');
       var empty = document.getElementById('emptyProducts');
-      if (!products.length) { tbody.innerHTML = ''; empty.style.display = 'block'; return; }
-      empty.style.display = 'none';
+      if (!tbody) return;
+      if (!products.length) { tbody.innerHTML = ''; if (empty) empty.style.display = 'block'; return; }
+      if (empty) empty.style.display = 'none';
       tbody.innerHTML = products.map(function(p, i) {
         return '<tr><td><img class="product-thumb" src="' + (p.image||'') + '" /></td>' +
           '<td style="font-weight:600">' + p.name + '</td>' +
@@ -328,32 +330,59 @@
       });
     }
 
-    document.getElementById('loginBtn').onclick = login;
-    document.getElementById('adminPassword').onkeydown = function(e) { if (e.key === 'Enter') login(); };
-    document.getElementById('logoutBtn').onclick = logout;
-    document.getElementById('publishBtn').onclick = publishCurrent;
-    document.querySelectorAll('.tab-btn').forEach(function(b) {
-      b.onclick = function() { switchTab(b.getAttribute('data-tab')); };
-    });
-    document.getElementById('addProductBtn').onclick = function() { openProductForm(null); };
-    document.getElementById('saveProductBtn').onclick = saveProduct;
-    document.getElementById('cancelProductBtn').onclick = function() { document.getElementById('productForm').classList.remove('open'); };
-    document.getElementById('addCouponBtn').onclick = function() {
-      document.getElementById('couponForm').classList.add('open');
-      document.getElementById('couponEditIdx').value = '-1';
-      document.getElementById('cCode').value = '';
-      document.getElementById('cType').value = 'percent';
-      document.getElementById('cValue').value = '';
-      document.getElementById('cLabel').value = '';
-    };
-    document.getElementById('saveCouponBtn').onclick = saveCoupon;
-    document.getElementById('cancelCouponBtn').onclick = function() { document.getElementById('couponForm').classList.remove('open'); };
-    document.getElementById('refreshOrdersBtn').onclick = function() { loadAll().then(function(){ showToast('تم التحديث'); }); };
+    function bindUI() {
+      window.__adminLogin = login;
+      var loginBtn = document.getElementById('loginBtn');
+      if (loginBtn) loginBtn.onclick = login;
+      var passInput = document.getElementById('adminPassword');
+      if (passInput) passInput.onkeydown = function(e) { if (e.key === 'Enter') login(); };
+      var logoutBtn = document.getElementById('logoutBtn');
+      if (logoutBtn) logoutBtn.onclick = logout;
+      var publishBtn = document.getElementById('publishBtn');
+      if (publishBtn) publishBtn.onclick = publishCurrent;
+      document.querySelectorAll('.tab-btn').forEach(function(b) {
+        b.onclick = function() { switchTab(b.getAttribute('data-tab')); };
+      });
+      var addP = document.getElementById('addProductBtn');
+      if (addP) addP.onclick = function() { openProductForm(null); };
+      var saveP = document.getElementById('saveProductBtn');
+      if (saveP) saveP.onclick = saveProduct;
+      var cancelP = document.getElementById('cancelProductBtn');
+      if (cancelP) cancelP.onclick = function() { document.getElementById('productForm').classList.remove('open'); };
+      var addC = document.getElementById('addCouponBtn');
+      if (addC) addC.onclick = function() {
+        document.getElementById('couponForm').classList.add('open');
+        document.getElementById('couponEditIdx').value = '-1';
+        document.getElementById('cCode').value = '';
+        document.getElementById('cType').value = 'percent';
+        document.getElementById('cValue').value = '';
+        document.getElementById('cLabel').value = '';
+      };
+      var saveC = document.getElementById('saveCouponBtn');
+      if (saveC) saveC.onclick = saveCoupon;
+      var cancelC = document.getElementById('cancelCouponBtn');
+      if (cancelC) cancelC.onclick = function() { document.getElementById('couponForm').classList.remove('open'); };
+      var refreshO = document.getElementById('refreshOrdersBtn');
+      if (refreshO) refreshO.onclick = function() { loadAll().then(function(){ showToast('تم التحديث'); }); };
+    }
 
-    if (sessionStorage.getItem('athar_admin') === '1') {
-      adminPassword = sessionStorage.getItem('athar_admin_pass') || ADMIN_PASS;
-      document.getElementById('loginScreen').style.display = 'none';
-      document.getElementById('dashboard').classList.add('active');
-      loadAll();
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', function() {
+        bindUI();
+        if (sessionStorage.getItem('athar_admin') === '1') {
+          adminPassword = sessionStorage.getItem('athar_admin_pass') || ADMIN_PASS;
+          document.getElementById('loginScreen').style.display = 'none';
+          document.getElementById('dashboard').classList.add('active');
+          loadAll();
+        }
+      });
+    } else {
+      bindUI();
+      if (sessionStorage.getItem('athar_admin') === '1') {
+        adminPassword = sessionStorage.getItem('athar_admin_pass') || ADMIN_PASS;
+        document.getElementById('loginScreen').style.display = 'none';
+        document.getElementById('dashboard').classList.add('active');
+        loadAll();
+      }
     }
   })();
