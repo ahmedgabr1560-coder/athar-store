@@ -1,1 +1,22 @@
-[]
+[
+  {
+    "id": "TEST-CHECK",
+    "customer": {
+      "name": "فحص",
+      "phone": "010",
+      "address": "طنطا",
+      "governorate": "الغربية",
+      "center": "طنطا"
+    },
+    "items": [
+      {
+        "name": "test",
+        "qty": 1,
+        "price": 100
+      }
+    ],
+    "total": 100,
+    "status": "pending",
+    "date": "2026-11-10"
+  }
+]
