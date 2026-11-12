@@ -38,7 +38,7 @@ async function fetchProducts() {
 function renderProductCard(p) {
   const discountBadge = p.discount ? `<span class="discount-badge">خصم ${p.discount}%</span>` : '';
   const oldPrice = p.oldPrice ? `<span class="old">${p.oldPrice} ج.م</span>` : '';
-  return `<article class="product-card">
+  return `<article class="product-card" data-product-id="${p.id}">
     <div class="product-img-wrap">
       <img src="${p.image}" alt="${p.name}" loading="lazy" decoding="async" width="400" height="500" />
       ${discountBadge}
@@ -84,8 +84,8 @@ function bindProductButtons() {
         const name = card.querySelector('.product-name')?.textContent?.trim() || 'منتج';
         const priceText = card.querySelector('.product-price .current')?.textContent || '0';
         const price = parseInt(priceText.replace(/[^\d]/g, ''), 10) || 0;
-        const id = name.replace(/\s+/g, '-') + '-' + price;
-        window.location.href = 'product.html?id=' + encodeURIComponent(id);
+      const id = card.dataset.productId || name.replace(/\s+/g, '-') + '-' + price;
+      window.location.href = 'product.html?id=' + encodeURIComponent(id);
       });
     }
     const btn = card.querySelector('.add-to-cart');
@@ -98,8 +98,8 @@ function bindProductButtons() {
       const priceText = card.querySelector('.product-price .current')?.textContent || '0';
       const price = parseInt(priceText.replace(/[^\d]/g, ''), 10) || 0;
       const image = card.querySelector('.product-img-wrap img')?.src || '';
-      const id = name.replace(/\s+/g, '-') + '-' + price;
-      addToCart({ id, name, price, image });
+      const productId = card.dataset.productId || name.replace(/\s+/g, '-') + '-' + price;
+      addToCart({ id: productId, productId, name, price, image });
       btn.style.background = '#c9a86c';
       btn.style.color = '#111';
       btn.style.transform = 'scale(1.15)';

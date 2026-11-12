@@ -228,7 +228,7 @@
       const msg = document.getElementById('couponMsg');
       if (!code) { msg.textContent = 'أدخل كود الخصم'; msg.className = 'coupon-msg err'; return; }
       if (!COUPONS[code]) { appliedCoupon = null; msg.textContent = 'كود غير صالح'; msg.className = 'coupon-msg err'; cacheForm(); renderCartPage(); restoreFormFields(); return; }
-      appliedCoupon = COUPONS[code]; formCache.couponInput = code;
+      appliedCoupon = { ...COUPONS[code], code }; formCache.couponInput = code;
       cacheForm(); renderCartPage(); restoreFormFields();
       const m = document.getElementById('couponMsg'); if (m) { m.textContent = 'تم تطبيق: ' + appliedCoupon.label; m.className = 'coupon-msg ok'; }
     }
@@ -240,7 +240,7 @@
     function removeFromCart(id) {
       cacheForm(); saveCart(getCart().filter(i => i.id !== id)); renderCartPage(); restoreFormFields(); updateCartCount();
     }
-    function checkout() {
+    async function checkout() {
       const cart = getCart(); if (!cart.length) return;
       const name = (document.getElementById('custName')?.value || '').trim();
       const phone = (document.getElementById('custPhone')?.value || '').trim();
@@ -253,30 +253,34 @@
       if (!gov) { alert('اختر المحافظة'); return; }
       if (!center) { alert('اختر المركز / المدينة'); return; }
       if (!address) { alert('أدخل العنوان بالتفصيل'); return; }
-      const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
-      let shipping = getShippingCost();
-      const disc = calcDiscount(subtotal);
-      if (disc.shippingOverride !== null) shipping = disc.shippingOverride;
-      else if (subtotal >= 800) shipping = 0;
-      const discountAmount = disc.amount;
-      const total = Math.max(0, subtotal - discountAmount) + shipping;
-      const orderId = 'ATH-' + Date.now().toString().slice(-6);
-      const dateStr = new Date().toLocaleDateString('ar-EG', { year: 'numeric', month: 'long', day: 'numeric' });
       const order = {
-        id: orderId,
-        items: cart.map(i => ({ name: i.name, price: i.price, qty: i.qty, image: i.image })),
-        subtotal, shipping, discount: discountAmount,
-        coupon: appliedCoupon ? appliedCoupon.label : null,
-        total,
-        customer: { name, phone, governorate: gov, center, address, notes },
-        status: 'pending', date: dateStr, dates: [dateStr, '', '', '']
+        items: cart.map(item => ({ productId: item.productId, qty: item.qty, size: item.size || '', color: item.color || '', material: item.material || '' })),
+        couponCode: appliedCoupon ? appliedCoupon.code : '',
+        customer: { name, phone, governorate: gov, center, address, notes }
       };
-      let orders = []; try { orders = JSON.parse(localStorage.getItem('athar_orders')) || []; } catch(e) {}
-      orders.unshift(order); localStorage.setItem('athar_orders', JSON.stringify(orders));
-      saveCart([]); updateCartCount(); appliedCoupon = null; selectedGov = ''; selectedCenter = ''; formCache = {};
-      if (confirm('تم استلام طلبك!\n\nرقم الطلب: ' + orderId + '\nالإجمالي: ' + total + ' ج.م\n\nمتابعة الطلب؟')) {
-        window.location.href = 'track.html?id=' + orderId;
-      } else { renderCartPage(); }
+      const button = document.querySelector('.checkout-btn');
+      if (button) { button.disabled = true; button.textContent = 'جاري إرسال الطلب...'; }
+      try {
+        const response = await fetch('/api/create-order', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'same-origin',
+          body: JSON.stringify(order)
+        });
+        const saved = await response.json().catch(() => ({}));
+        if (!response.ok || !saved.success) {
+          alert(saved.error || 'تعذر حفظ الطلب. لم تُفرغ السلة. حاول مرة أخرى.');
+          return;
+        }
+        saveCart([]); updateCartCount(); appliedCoupon = null; selectedGov = ''; selectedCenter = ''; formCache = {};
+        if (confirm('تم استلام طلبك!\n\nرقم الطلب: ' + saved.orderId + '\nالإجمالي: ' + saved.total + ' ج.م\n\nمتابعة الطلب؟')) {
+          window.location.href = 'track.html?id=' + encodeURIComponent(saved.orderId);
+        } else { renderCartPage(); }
+      } catch (error) {
+        alert('تعذر الاتصال بالخادم. لم تُفرغ السلة. حاول مرة أخرى.');
+      } finally {
+        if (button && document.body.contains(button)) { button.disabled = false; button.textContent = 'تأكيد الطلب'; }
+      }
     }
     document.addEventListener('DOMContentLoaded', () => { renderCartPage(); updateCartCount(); });
   </script>

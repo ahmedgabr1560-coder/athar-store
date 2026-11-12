@@ -1,7 +1,8 @@
+const { hasAdminSession, isSameOrigin } = require('../lib/admin-auth');
+
 module.exports = async function handler(req, res) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Cache-Control', 'no-store');
+  res.setHeader('X-Content-Type-Options', 'nosniff');
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
@@ -52,8 +53,7 @@ module.exports = async function handler(req, res) {
       return res.status(200).json({ success: true, total: data.total, today: data.today });
     }
 
-    const { password, file, data } = req.body || {};
-    const ADMIN_PASS = process.env.ADMIN_PASSWORD || 'athar2026';
+    const { file, data } = req.body || {};
     const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
     const REPO_OWNER = process.env.REPO_OWNER || 'ahmedgabr1560-coder';
     const REPO_NAME = process.env.REPO_NAME || 'athar-store';
@@ -62,14 +62,12 @@ module.exports = async function handler(req, res) {
       products: 'data/products.json',
       coupons: 'data/coupons.json',
       shipping: 'data/shipping.json',
-      orders: 'data/orders.json',
       settings: 'data/settings.json',
       visits: 'data/visits.json'
     };
 
-    if (!password || password !== ADMIN_PASS) {
-      return res.status(401).json({ error: 'كلمة المرور غير صحيحة' });
-    }
+    if (!isSameOrigin(req)) return res.status(403).json({ error: 'طلب غير مسموح' });
+    if (!hasAdminSession(req)) return res.status(401).json({ error: 'يلزم تسجيل الدخول' });
     if (!ALLOWED[file]) {
       return res.status(400).json({ error: 'ملف غير مسموح' });
     }

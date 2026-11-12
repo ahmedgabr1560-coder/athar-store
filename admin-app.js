@@ -1,10 +1,15 @@
 (function() {
-  var ADMIN_PASS = 'athar2026';
   var API = '/api/update-data';
-  var adminPassword = '', products = [], coupons = [], orders = [], settings = {};
+  var products = [], coupons = [], orders = [], settings = {};
   var shipping = { freeShippingMin: 800, governorates: {} };
   var visits = { total: 0, today: 0, history: [] };
   var currentTab = 'products';
+
+  function escapeHtml(value) {
+    return String(value == null ? '' : value).replace(/[&<>"']/g, function(ch) {
+      return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[ch];
+    });
+  }
 
   function showToast(msg, isError) {
     var t = document.getElementById('toast');
@@ -14,21 +19,28 @@
     setTimeout(function() { t.classList.remove('show'); }, 3500);
   }
 
-  function login() {
+  async function login() {
     var pass = (document.getElementById('adminPassword').value || '').trim();
-    if (pass === ADMIN_PASS) {
-      adminPassword = pass;
+    if (!pass) { showToast('أدخل كلمة المرور', true); return; }
+    try {
+      var response = await fetch('/api/admin-auth', {
+        method: 'POST', credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: pass })
+      });
+      var result = await response.json().catch(function(){ return {}; });
+      if (!response.ok || !result.success) { showToast(result.error || 'تعذر تسجيل الدخول', true); return; }
       sessionStorage.setItem('athar_admin', '1');
-      sessionStorage.setItem('athar_admin_pass', pass);
       document.getElementById('loginScreen').style.display = 'none';
       document.getElementById('dashboard').classList.add('active');
-      loadAll();
-    } else showToast('كلمة المرور غير صحيحة', true);
+      document.getElementById('adminPassword').value = '';
+      await loadAll();
+    } catch (e) { showToast('تعذر الاتصال بالخادم', true); }
   }
 
   function logout() {
+    fetch('/api/admin-auth', { method: 'DELETE', credentials: 'same-origin' }).catch(function(){});
     sessionStorage.removeItem('athar_admin');
-    sessionStorage.removeItem('athar_admin_pass');
     document.getElementById('dashboard').classList.remove('active');
     document.getElementById('loginScreen').style.display = 'flex';
   }
@@ -66,16 +78,14 @@
     var p = await fetchJSON('data/products.json'); if (Array.isArray(p)) products = p;
     var c = await fetchJSON('data/coupons.json'); if (Array.isArray(c)) coupons = c;
     var s = await fetchJSON('data/shipping.json'); if (s && s.governorates) shipping = s;
-    var o = await fetchJSON('data/orders.json'); if (Array.isArray(o)) orders = o;
+    try {
+      var orderResponse = await fetch('/api/admin-orders', { credentials: 'same-origin', cache: 'no-store' });
+      var orderResult = await orderResponse.json().catch(function(){ return {}; });
+      if (orderResponse.ok && Array.isArray(orderResult.orders)) orders = orderResult.orders;
+      else if (orderResponse.status === 401) { logout(); return; }
+    } catch (e) { orders = []; }
     var st = await fetchJSON('data/settings.json'); if (st && typeof st === 'object') settings = st;
     var v = await fetchJSON('data/visits.json'); if (v && typeof v === 'object') visits = v;
-    try {
-      var local = JSON.parse(localStorage.getItem('athar_orders') || '[]');
-      if (local.length) {
-        var ids = orders.map(function(x){ return x.id; });
-        local.forEach(function(lo) { if (ids.indexOf(lo.id) === -1) orders.push(lo); });
-      }
-    } catch(e) {}
     renderProducts(); renderOrders(); renderCoupons(); renderShipping(); renderSettings(); renderVisitors();
   }
 
@@ -83,10 +93,13 @@
     var btn = document.getElementById('publishBtn');
     if (btn) { btn.disabled = true; btn.textContent = 'جاري النشر...'; }
     try {
-      var res = await fetch(API, {
+      var endpoint = file === 'orders' ? '/api/admin-orders' : API;
+      var payload = file === 'orders' ? { orders: data } : { file: file, data: data };
+      var res = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password: adminPassword || sessionStorage.getItem('athar_admin_pass') || ADMIN_PASS, file: file, data: data })
+        credentials: 'same-origin',
+        body: JSON.stringify(payload)
       });
       var d = await res.json().catch(function(){ return {}; });
       if (!res.ok) showToast(d.error || 'فشل النشر', true);
@@ -161,8 +174,8 @@
     if (!orders.length) { tbody.innerHTML=''; empty.style.display='block'; return; }
     empty.style.display='none';
     tbody.innerHTML = orders.map(function(o,i){
-      var cust=o.customer||{}, items=(o.items||[]).map(function(it){return it.name+'×'+(it.qty||1);}).join('، ');
-      return '<tr><td style="font-weight:700;font-size:11px">'+o.id+'<br><span style="font-weight:400;color:var(--muted)">'+(o.date||'')+'</span></td><td><div class="order-detail"><strong style="color:var(--text)">'+(cust.name||'—')+'</strong><br>'+(cust.phone||'')+'<br>'+(cust.governorate||'')+' - '+(cust.center||'')+'<br>'+(cust.address||'')+'</div></td><td><div class="order-detail">'+items+'</div></td><td style="font-weight:600">'+o.total+' ج.م</td><td><span class="badge '+(STATUS_BADGE[o.status]||'badge-pending')+'">'+(STATUS_LABELS[o.status]||o.status)+'</span></td><td><select class="status-select" data-oi="'+i+'">'+['pending','confirmed','shipping','delivered','cancelled'].map(function(s){return '<option value="'+s+'"'+(o.status===s?' selected':'')+'>'+STATUS_LABELS[s]+'</option>';}).join('')+'</select></td></tr>';
+      var cust=o.customer||{}, items=(o.items||[]).map(function(it){return escapeHtml(it.name)+'×'+(Number(it.qty)||1);}).join('، ');
+      return '<tr><td style="font-weight:700;font-size:11px">'+escapeHtml(o.id)+'<br><span style="font-weight:400;color:var(--muted)">'+escapeHtml(o.date||'')+'</span></td><td><div class="order-detail"><strong style="color:var(--text)">'+escapeHtml(cust.name||'—')+'</strong><br>'+escapeHtml(cust.phone||'')+'<br>'+escapeHtml(cust.governorate||'')+' - '+escapeHtml(cust.center||'')+'<br>'+escapeHtml(cust.address||'')+'</div></td><td><div class="order-detail">'+items+'</div></td><td style="font-weight:600">'+(Number(o.total)||0)+' ج.م</td><td><span class="badge '+(STATUS_BADGE[o.status]||'badge-pending')+'">'+escapeHtml(STATUS_LABELS[o.status]||o.status)+'</span></td><td><select class="status-select" data-oi="'+i+'">'+['pending','confirmed','shipping','delivered','cancelled'].map(function(s){return '<option value="'+s+'"'+(o.status===s?' selected':'')+'>'+STATUS_LABELS[s]+'</option>';}).join('')+'</select></td></tr>';
     }).join('');
     tbody.querySelectorAll('.status-select').forEach(function(sel){
       sel.onchange=function(){ orders[+sel.getAttribute('data-oi')].status=sel.value; renderOrders(); showToast('تم — انشر'); };
@@ -264,12 +277,16 @@
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bindUI);
   else bindUI();
 
-  if (sessionStorage.getItem('athar_admin') === '1') {
-    adminPassword = sessionStorage.getItem('athar_admin_pass') || ADMIN_PASS;
-    var loginEl = document.getElementById('loginScreen');
-    if (loginEl) loginEl.style.display = 'none';
-    var dash = document.getElementById('dashboard');
-    if (dash) dash.classList.add('active');
-    loadAll();
-  }
+  fetch('/api/admin-auth', { credentials: 'same-origin', cache: 'no-store' })
+    .then(function(response){ return response.json(); })
+    .then(function(result){
+      if (!result.authenticated) { sessionStorage.removeItem('athar_admin'); return; }
+      sessionStorage.setItem('athar_admin', '1');
+      var loginEl = document.getElementById('loginScreen');
+      if (loginEl) loginEl.style.display = 'none';
+      var dash = document.getElementById('dashboard');
+      if (dash) dash.classList.add('active');
+      loadAll();
+    })
+    .catch(function(){ sessionStorage.removeItem('athar_admin'); });
 })();

@@ -157,7 +157,7 @@
       const id = currentProduct.id + '-' + selectedSize + '-' + selectedColor + '-' + selectedMaterial;
       let name = currentProduct.name + ' (' + selectedSize + ' / ' + selectedColor + ' / ' + selectedMaterial + ')';
       if (notes) name += ' — ملاحظة: ' + notes;
-      for (let i = 0; i < quantity; i++) addToCart({ id, name, price: currentProduct.price, image: currentProduct.image });
+      for (let i = 0; i < quantity; i++) addToCart({ id, productId: currentProduct.id, size: selectedSize, color: selectedColor, material: selectedMaterial, name, price: currentProduct.price, image: currentProduct.image });
       const btn = document.querySelector('.add-cart-btn');
       btn.textContent = 'تمت الإضافة ✓'; btn.style.background = '#27ae60';
       setTimeout(() => { btn.textContent = 'أضف إلى السلة'; btn.style.background = ''; }, 1500);

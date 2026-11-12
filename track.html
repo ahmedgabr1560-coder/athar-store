@@ -14,8 +14,8 @@
     [data-theme="dark"] .track-box { background: var(--charcoal); }
     .track-box h1 { font-size: 1.5rem; font-weight: 700; margin-bottom: 8px; text-align: center; }
     .track-box .subtitle { text-align: center; color: var(--text-muted); font-size: 14px; margin-bottom: 28px; }
-    .track-form { display: flex; gap: 10px; margin-bottom: 28px; }
-    .track-form input { flex: 1; border: 1.5px solid var(--border); border-radius: 10px; padding: 14px 16px; font-family: inherit; font-size: 15px; background: transparent; color: var(--text); outline: none; }
+    .track-form { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 28px; }
+    .track-form input { flex: 1 1 160px; min-width: 0; border: 1.5px solid var(--border); border-radius: 10px; padding: 14px 16px; font-family: inherit; font-size: 15px; background: transparent; color: var(--text); outline: none; }
     .track-form input:focus { border-color: var(--gold); }
     .track-form button { white-space: nowrap; padding: 14px 22px; }
     .order-result { display: none; }
@@ -96,6 +96,7 @@
         <p class="subtitle">أدخل رقم الطلب لمعرفة حالته</p>
         <div class="track-form">
           <input type="text" id="orderInput" placeholder="مثال: ATH-123456" />
+          <input type="tel" id="phoneInput" placeholder="رقم الموبايل" maxlength="11" autocomplete="tel" />
           <button class="btn btn-gold" onclick="trackOrder()">تتبع</button>
         </div>
         <div class="order-result" id="orderResult"></div>
@@ -109,7 +110,6 @@
   </footer>
   <script src="script.js"></script>
   <script>
-    const ORDERS_KEY = 'athar_orders';
     const STATUS_MAP = {
       pending: { label: 'قيد المراجعة', class: 'status-pending', step: 0 },
       confirmed: { label: 'تم التأكيد', class: 'status-confirmed', step: 1 },
@@ -118,21 +118,29 @@
       cancelled: { label: 'ملغي', class: 'status-cancelled', step: -1 }
     };
     const STEPS = ['قيد المراجعة', 'تم التأكيد', 'جاري الشحن', 'تم التسليم'];
-    function getOrders() {
-      try { return JSON.parse(localStorage.getItem(ORDERS_KEY)) || []; }
-      catch { return []; }
+    function escapeHtml(value) {
+      return String(value ?? '').replace(/[&<>"']/g, ch => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[ch]));
     }
-    function trackOrder() {
+    async function trackOrder() {
       const input = document.getElementById('orderInput').value.trim().toUpperCase();
+      const phone = document.getElementById('phoneInput').value.trim();
       const result = document.getElementById('orderResult');
-      if (!input) { result.className = 'order-result show'; result.innerHTML = '<p class="not-found-msg">من فضلك أدخل رقم الطلب</p>'; return; }
-      const orders = getOrders();
-      const order = orders.find(o => o.id.toUpperCase() === input);
-      if (!order) {
+      if (!input || !/^01[0-9]{9}$/.test(phone)) { result.className = 'order-result show'; result.innerHTML = '<p class="not-found-msg">أدخل رقم الطلب ورقم الموبايل المسجل به</p>'; return; }
+      try {
+        const response = await fetch('/api/track-order', {
+          method: 'POST', credentials: 'same-origin',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id: input, phone })
+        });
+        const order = response.ok ? await response.json() : null;
+        if (!order) throw new Error('not-found');
+        renderOrder(order, result);
+      } catch {
         result.className = 'order-result show';
-        result.innerHTML = '<p class="not-found-msg">لم يتم العثور على طلب بهذا الرقم.<br>تأكد من الرقم أو تواصل معنا.</p>';
-        return;
+        result.innerHTML = '<p class="not-found-msg">لم يتم العثور على الطلب. تأكد من رقم الطلب والموبايل.</p>';
       }
+    }
+    function renderOrder(order, result) {
       const st = STATUS_MAP[order.status] || STATUS_MAP.pending;
       const stepIndex = st.step;
       let timelineHtml = STEPS.map((title, i) => {
@@ -141,30 +149,30 @@
         else if (i < stepIndex) cls = 'done';
         else if (i === stepIndex) cls = 'active done';
         const date = order.dates && order.dates[i] ? order.dates[i] : '';
-        return `<div class="timeline-step ${cls}"><div class="timeline-dot"></div><div class="step-title">${title}</div>${date ? `<div class="step-date">${date}</div>` : ''}</div>`;
+        return `<div class="timeline-step ${cls}"><div class="timeline-dot"></div><div class="step-title">${title}</div>${date ? `<div class="step-date">${escapeHtml(date)}</div>` : ''}</div>`;
       }).join('');
       const itemsHtml = (order.items || []).map(item => `
         <div class="order-item">
-          <img src="${item.image || ''}" alt="${item.name}" onerror="this.style.display='none'" />
+          <img src="${escapeHtml(item.image || '')}" alt="${escapeHtml(item.name)}" onerror="this.style.display='none'" />
           <div class="order-item-info">
-            <div class="order-item-name">${item.name}</div>
-            <div class="order-item-meta">${item.qty || 1} × ${item.price} ج.م</div>
+            <div class="order-item-name">${escapeHtml(item.name)}</div>
+            <div class="order-item-meta">${Number(item.qty) || 1} × ${Number(item.price) || 0} ج.م</div>
           </div>
         </div>
       `).join('');
       result.className = 'order-result show';
       result.innerHTML = `
         <div class="order-header">
-          <div class="order-id">${order.id}</div>
+          <div class="order-id">${escapeHtml(order.id)}</div>
           <span class="status-badge ${st.class}">${st.label}</span>
         </div>
         <div class="timeline">${timelineHtml}</div>
         <div class="order-items">${itemsHtml}</div>
         <div class="order-total">
           <span>الإجمالي</span>
-          <span class="gold">${order.total} ج.م</span>
+          <span class="gold">${Number(order.total) || 0} ج.م</span>
         </div>
-        ${order.date ? `<p style="margin-top:12px;font-size:12px;color:var(--text-muted);text-align:center">تاريخ الطلب: ${order.date}</p>` : ''}
+        ${order.date ? `<p style="margin-top:12px;font-size:12px;color:var(--text-muted);text-align:center">تاريخ الطلب: ${escapeHtml(order.date)}</p>` : ''}
       `;
     }
     document.getElementById('orderInput')?.addEventListener('keydown', e => { if (e.key === 'Enter') trackOrder(); });
@@ -172,7 +180,7 @@
       updateCartCount();
       const params = new URLSearchParams(window.location.search);
       const id = params.get('id');
-      if (id) { document.getElementById('orderInput').value = id; trackOrder(); }
+      if (id) document.getElementById('orderInput').value = id;
     });
   </script>
 </body>
