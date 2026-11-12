@@ -2,9 +2,6 @@
   "name": "athar-store",
   "version": "1.0.0",
   "private": true,
-  "engines": {
-    "node": "22.x"
-  },
   "dependencies": {
     "@vercel/blob": "^2.3.0"
   }
